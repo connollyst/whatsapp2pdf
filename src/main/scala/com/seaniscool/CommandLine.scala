@@ -1,7 +1,6 @@
 package com.seaniscool
 
-import com.beust.jcommander.{IStringConverter, JCommander}
-import java.io.File
+import com.beust.jcommander.JCommander
 
 
 /**
