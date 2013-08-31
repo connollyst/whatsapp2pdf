@@ -28,9 +28,14 @@ object CommandLineArgs {
   )
   private val _outputDirectory: java.util.List[File] = null
 
+  @Parameter(
+    names = Array("-d", "-debug"),
+    description = "Debug mode"
+  )
+  val debugMode: Boolean = false
+
   def whatsAppFiles: List[File] = _whatsAppFile.toList
 
   def outputDirectory: File = _outputDirectory.get(0)
-
 
 }
