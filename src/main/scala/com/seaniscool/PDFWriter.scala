@@ -1,6 +1,6 @@
 package com.seaniscool
 
-import com.lowagie.text.{Paragraph, Document}
+import com.lowagie.text.{Phrase, Paragraph, Document}
 import com.lowagie.text.pdf.PdfWriter
 import java.io.{File, FileOutputStream}
 import com.google.common.io.Files
@@ -27,7 +27,12 @@ class PDFWriter(directory: File) {
     val outStream = new FileOutputStream(getFile(name))
     PdfWriter.getInstance(document, outStream)
     document.open()
-    document.add(new Paragraph("Hello World!"))
+    for (message <- conversation.messages) {
+      val paragraph = new Paragraph()
+      for (line <- message.lines)
+        paragraph.add(new Phrase(line.text))
+      document.add(paragraph)
+    }
     document.close()
   }
 

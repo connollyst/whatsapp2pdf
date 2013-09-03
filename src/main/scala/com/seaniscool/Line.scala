@@ -10,7 +10,7 @@ import com.google.common.base.Objects
   *
   * @author Sean Connolly
   */
-class Line(text: String, number: Int) {
+class Line(val text: String, val number: Int) {
 
   def isNewMessage: Boolean = {
     containsDate
