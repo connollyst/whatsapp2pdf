@@ -5,11 +5,12 @@ import scala.collection.JavaConversions._
 import java.io.File
 import com.beust.jcommander.converters.FileConverter
 
-/**
- *
- *
- * @author Sean Connolly
- */
+/** Command line arguments.
+  * This object is passed to [[com.beust.jcommander.JCommander]] to be filled
+  * and is then used by [[com.seaniscool.CommandLine]].
+  *
+  * @author Sean Connolly
+  */
 object CommandLineArgs {
 
   @Parameter(
@@ -23,6 +24,7 @@ object CommandLineArgs {
   @Parameter(
     names = Array("-o", "-output"),
     description = "The output directory.",
+    required = false,
     arity = 1,
     converter = classOf[FileConverter]
   )
@@ -36,6 +38,18 @@ object CommandLineArgs {
 
   def whatsAppFiles: List[File] = _whatsAppFile.toList
 
-  def outputDirectory: File = _outputDirectory.get(0)
+  /** Get the output directory.
+    *
+    * If one is not specified, the user's current working directory is used.
+    *
+    * @return the output directory
+    */
+  def outputDirectory: File = {
+    if (!_outputDirectory.isEmpty) {
+      _outputDirectory.get(0)
+    } else {
+      new File(System.getProperty("user.dir"))
+    }
+  }
 
 }
