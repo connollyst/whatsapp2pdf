@@ -13,7 +13,7 @@ The simplest use case is to run the tool on a single file:
 
 This will produce `file.pdf` in your current directory.
 
-You can hand `whatsapp2pdf` any number of files:
+You can hand _whatsapp2pdf_ any number of files:
 
     whatsapp2pdf file_1.txt file_2.txt file_3.txt
 
@@ -27,7 +27,17 @@ You can specify the output directory with the `-o` flag:
 Input Format
 ------------
 
-    // TODO
+**The only accepted input format for the text files to be converted to PDF, is
+a direct export of a WhatsApp conversation.**
+
+To export a conversation from WhatsApp:
+* Open WhatsApp
+* Navigate to the conversation
+* Tap the `...` button in the top right to open the conversation menu.
+* Select `More`, the last option in the menu.
+* Choose `Email Conversation`
+* If you want to include images in the resulting PDF, select `Attach media`.
+  Note that most email providers have a limit on the size an email can be.
 
 Notes
 -----
