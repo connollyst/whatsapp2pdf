@@ -10,7 +10,11 @@ import com.google.common.base.Objects
   *
   * @author Sean Connolly
   */
-class Line(val text: String, val number: Int) {
+class Line(text: String, val number: Int) {
+
+  val date = extractDate
+  val user = extractUser
+  val body = extractBody
 
   def isNewMessage: Boolean = {
     containsDate
@@ -28,13 +32,13 @@ class Line(val text: String, val number: Int) {
     getDateMatcher.replaceFirst("")
   }
 
-  def getDate: Date = {
+  private def extractDate: Option[Date] = {
     val dateMatcher = getDateMatcher
     if (dateMatcher.find) {
       val date = dateMatcher.group(1)
-      Line.DATE_FORMAT.parse(date)
+      Some(Line.DATE_FORMAT.parse(date))
     } else {
-      throw new RuntimeException("No date found on line #" + number + ": " + text)
+      None
     }
   }
 
@@ -46,7 +50,7 @@ class Line(val text: String, val number: Int) {
     getUserMatcher.replaceFirst("")
   }
 
-  def getUser: Option[String] = {
+  def extractUser: Option[String] = {
     val userMatcher = getUserMatcher
     if (userMatcher.find) {
       new Some(userMatcher.group(1))
@@ -55,12 +59,12 @@ class Line(val text: String, val number: Int) {
     }
   }
 
-  def getMessageBody: Option[String] = {
+  def extractBody: String = {
     val stripped = stripDateAndUser
     if (!stripped.isEmpty) {
-      new Some(stripped)
+      stripped
     } else {
-      None
+      ""
     }
   }
 

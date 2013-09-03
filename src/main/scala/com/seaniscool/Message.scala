@@ -1,6 +1,7 @@
 package com.seaniscool
 
 import scala.collection.mutable.ListBuffer
+import java.util.Date
 
 /** A message the unit of a [[com.seaniscool.Conversation]], consisting of a
   * date, a user name, and one or more [[com.seaniscool.Line]]s.
@@ -17,8 +18,37 @@ class Message(val lines: ListBuffer[Line]) {
     this(new ListBuffer[Line])
   }
 
-  def addLine(line: Line) = {
+  /** Append a line to the message.
+    *
+    * @param line the line
+    */
+  def append(line: Line) = {
     lines += line
+  }
+
+  /** Get the first line of the message.
+    *
+    * @return the first line
+    */
+  def firstLine: Line = {
+    lines.head
+  }
+
+  /** Get the date the message was sent
+    *
+    * @return the date
+    */
+  def date: Date = {
+    // TODO handle exceptions
+    firstLine.date.get
+  }
+
+  /** Get the name of the user who sent the message.
+    *
+    * @return the user name
+    */
+  def user: String = {
+    firstLine.user.getOrElse("")
   }
 
   /** Trim leading and trailing blank lines from the message. Blank lines in the

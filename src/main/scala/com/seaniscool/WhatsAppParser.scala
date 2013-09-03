@@ -17,7 +17,7 @@ class WhatsAppParser(outputDirectory: File) {
       if (line.isNewMessage) {
         conversation.add(new Message(line))
       } else {
-        conversation.last.addLine(line)
+        conversation.last.append(line)
       }
     }
     conversation
