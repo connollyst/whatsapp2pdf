@@ -2,10 +2,11 @@ package com.seaniscool
 
 import com.google.common.io.Files
 import com.lowagie.text.pdf.PdfWriter
-import com.lowagie.text.{Element, Phrase, Paragraph, Document}
+import com.lowagie.text._
 import java.io.{File, FileOutputStream}
 import java.text.SimpleDateFormat
 import java.util.{Calendar, Date}
+import scala.Some
 
 /** Writes a [[com.seaniscool.Conversation]] to PDF.
   *
@@ -23,11 +24,9 @@ class PDFWriter(directory: File) {
     * @param conversation the conversation to write
     */
   def write(name: String, conversation: Conversation) {
-    val document = new Document()
-    val outStream = new FileOutputStream(getFile(name))
-    var lastDate: Option[Date] = None
-    PdfWriter.getInstance(document, outStream)
+    val document = createDocument(name)
     document.open()
+    var lastDate: Option[Date] = None
     for (message <- conversation.messages) {
       val nextDate = message.date
       if (!lastDate.isDefined || isNewDay(lastDate.get, nextDate)) {
@@ -37,6 +36,13 @@ class PDFWriter(directory: File) {
       addMessage(document, message)
     }
     document.close()
+  }
+
+  def createDocument(name: String): Document = {
+    val document = new Document(PageSize.A5,
+      PDFWriter.MARGIN, PDFWriter.MARGIN, PDFWriter.MARGIN, PDFWriter.MARGIN)
+    PdfWriter.getInstance(document, new FileOutputStream(getFile(name)))
+    document
   }
 
   /** Get the PDF file using the given name as a suggestion.
@@ -118,11 +124,22 @@ class PDFWriter(directory: File) {
     paragraph.add(new Phrase(text))
   }
 
+  private def add(paragraph: Paragraph, text: String, style: String) {
+    paragraph.add(new Phrase(text))
+  }
+
 }
 
 object PDFWriter {
 
   private val DATE = new SimpleDateFormat("dd/ww/yy")
   private val TIME = new SimpleDateFormat("kk'h'mm")
+  private val MARGIN = margin(1)
+
+  private def margin(cm: Int): Int = {
+    val inches = cm / 2.54
+    val points = inches * 72
+    points.toInt
+  }
 
 }
