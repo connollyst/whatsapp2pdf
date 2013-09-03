@@ -13,9 +13,11 @@ object CommandLine {
   def main(args: Array[String]) {
     parseArgs(args)
     val parser = new WhatsAppParser(CommandLineArgs.outputDirectory)
+    val writer = new PDFWriter(CommandLineArgs.outputDirectory)
     for (file <- CommandLineArgs.whatsAppFiles) {
       val conversation = parser.parse(file)
       println(conversation)
+      writer.write(file.getName, conversation)
     }
   }
 
