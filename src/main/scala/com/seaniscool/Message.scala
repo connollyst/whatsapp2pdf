@@ -1,6 +1,5 @@
 package com.seaniscool
 
-import com.google.common.base.Objects
 import scala.collection.mutable.ListBuffer
 
 /**
