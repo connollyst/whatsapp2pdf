@@ -2,10 +2,10 @@ package com.seaniscool
 
 import java.io.File
 
-/**
- *
- * @author Sean Connolly
- */
+/** The parser, transforms raw text to a [[com.seaniscool.Conversation]].
+  *
+  * @author Sean Connolly
+  */
 class WhatsAppParser(outputDirectory: File) {
 
   def parse(file: File): Conversation = {
