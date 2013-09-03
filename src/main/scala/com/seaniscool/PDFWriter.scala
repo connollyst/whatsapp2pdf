@@ -61,7 +61,7 @@ class PDFWriter(directory: File) {
     file
   }
 
-  /** Determine if the `nextDate` is a different **day** than the `lastDate`.
+  /** Determine if the `nextDate` is a different '''day''' than the `lastDate`.
     * This will indicate that we need to print a new day header.
     *
     * @param lastDate the last date
@@ -73,10 +73,11 @@ class PDFWriter(directory: File) {
     val nextCalendar = Calendar.getInstance()
     lastCalendar.setTime(lastDate)
     nextCalendar.setTime(nextDate)
-    // TODO handle edge case: same day, different years
     val lastDay = lastCalendar.get(Calendar.DAY_OF_YEAR)
     val nextDay = nextCalendar.get(Calendar.DAY_OF_YEAR)
-    lastDay != nextDay
+    val lastYear = lastCalendar.get(Calendar.YEAR)
+    val nextYear = nextCalendar.get(Calendar.YEAR)
+    lastDay != nextDay && lastYear != nextYear
   }
 
   private def addDate(document: Document, date: Date) {
