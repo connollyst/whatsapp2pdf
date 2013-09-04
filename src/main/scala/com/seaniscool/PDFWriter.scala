@@ -1,18 +1,24 @@
 package com.seaniscool
 
 import com.google.common.io.Files
-import com.lowagie.text.pdf.PdfWriter
 import com.lowagie.text._
+import com.lowagie.text.pdf.PdfWriter
+import java.awt.Color
 import java.io.{File, FileOutputStream}
 import java.text.SimpleDateFormat
 import java.util.{Calendar, Date}
+import scala.List
 import scala.Some
+import scala.collection.mutable
+
 
 /** Writes a [[com.seaniscool.Conversation]] to PDF.
   *
   * @author Sean Connolly
   */
 class PDFWriter(directory: File) {
+
+  private val colorMap = new mutable.HashMap[String, Font]
 
   /** Write the [[com.seaniscool.Conversation]] to a PDF file with the suggested
     * file name in the directory specified for this writer.
@@ -24,10 +30,11 @@ class PDFWriter(directory: File) {
     * @param conversation the conversation to write
     */
   def write(name: String, conversation: Conversation) {
+    colorMap.clear()
     val document = createDocument(name)
     document.open()
     var lastDate: Option[Date] = None
-    for (message <- conversation.messages) {
+    for (message <- conversation.clean.messages) {
       val nextDate = message.date
       if (!lastDate.isDefined || isNewDay(lastDate.get, nextDate)) {
         lastDate = Some(nextDate)
@@ -105,9 +112,9 @@ class PDFWriter(directory: File) {
 
   private def addUser(paragraph: Paragraph, message: Message) {
     val user = message.user
+    val style = userStyle(user)
     if (!user.isEmpty) {
-      add(paragraph, user)
-      add(paragraph, " ")
+      add(paragraph, user + " ", style)
     }
   }
 
@@ -121,11 +128,31 @@ class PDFWriter(directory: File) {
   }
 
   private def add(paragraph: Paragraph, text: String) {
-    paragraph.add(new Phrase(text))
+    add(paragraph, text, PDFWriter.FONT)
   }
 
-  private def add(paragraph: Paragraph, text: String, style: String) {
-    paragraph.add(new Phrase(text))
+  private def add(paragraph: Paragraph, text: String, font: Font) {
+    Log.debug("Printing " + text)
+    val phrase = new Chunk(text)
+    phrase.setFont(font)
+    paragraph.add(phrase)
+  }
+
+  private def userStyle(user: String): Font = {
+    if (!colorMap.contains(user)) {
+      colorMap.put(user, createUserStyle(user))
+    }
+    colorMap.get(user).get
+  }
+
+  private def createUserStyle(user: String): Font = {
+    val users = colorMap.size
+    val colorIndex = (users + 1) % PDFWriter.COLORS.size
+    val color = PDFWriter.COLORS(colorIndex)
+    val font = new Font(PDFWriter.FONT)
+    font.setColor(Color.decode(color))
+    Log.debug("Created user style for " + user + ": " + color)
+    font
   }
 
 }
@@ -136,10 +163,43 @@ object PDFWriter {
   private val TIME = new SimpleDateFormat("kk'h'mm")
   private val MARGIN = margin(1)
 
-  private def margin(cm: Int): Int = {
-    val inches = cm / 2.54
+  private def margin(inches: Int): Int = {
+    // val inches = cm / 2.54
     val points = inches * 72
     points.toInt
   }
+
+  // TODO this font is shite
+  //  private val FONT_FILE = "OriginalGaramond.ttf"
+  //  private val FONT_NAME = "OriginalGaramond"
+  //  private val FONT_RESOURCE = getClass.getClassLoader.getResource(FONT_FILE)
+  //  Log.debug("Registering custom font: " + FONT_RESOURCE)
+  //  FontFactory.register(FONT_RESOURCE.getFile, FONT_NAME)
+  //  private val FONT = FontFactory.getFont(FONT_NAME)
+  //  FONT.setSize(6)
+  private val FONT = new Font(Font.HELVETICA)
+  private val COLORS = List(
+    "#FF0000",
+    "#00C000",
+    "#0000FF",
+    "#CC0000",
+    "#FF6600",
+    "#FF0033",
+    "#CC0099",
+    "#99CC00",
+    "#9900CC",
+    "#9900FF",
+    "#993300",
+    "#990033",
+    "#660033",
+    "#333366",
+    "#330000",
+    "#000033",
+    "#000000",
+    "#3366FF",
+    "#66FF00",
+    "#663366",
+    "#66CC99"
+  )
 
 }

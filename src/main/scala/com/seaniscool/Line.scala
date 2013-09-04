@@ -24,6 +24,10 @@ class Line(text: String, val number: Int) {
     text.trim.isEmpty
   }
 
+  def isExcludable: Boolean = {
+    getExclusionMatcher.find()
+  }
+
   def containsDate: Boolean = {
     getDateMatcher.find
   }
@@ -77,6 +81,10 @@ class Line(text: String, val number: Int) {
     Line.USER_REGEX.matcher(stripped)
   }
 
+  private def getExclusionMatcher: Matcher = {
+    Line.IGNORE_REGEX.matcher(text)
+  }
+
   override def toString: String = {
     Objects.toStringHelper(getClass)
       .add("number", number)
@@ -91,5 +99,6 @@ object Line {
   private val DATE_FORMAT = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss")
   private val DATE_REGEX = Pattern.compile("(\\d{2}/\\d{2}/\\d{2} \\d{2}:\\d{2}:\\d{2})")
   private val USER_REGEX = Pattern.compile(": ([^:]*):")
+  private val IGNORE_REGEX = Pattern.compile("<media omitted>$")
 
 }

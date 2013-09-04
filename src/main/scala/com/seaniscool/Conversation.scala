@@ -7,9 +7,11 @@ import scala.collection.mutable.ListBuffer
   *
   * @author Sean Connolly
   */
-class Conversation {
+class Conversation(val messages: ListBuffer[Message]) {
 
-  val messages = new ListBuffer[Message]
+  def this() {
+    this(new ListBuffer[Message])
+  }
 
   def add(message: Message) = {
     messages += message
@@ -20,6 +22,19 @@ class Conversation {
       add(new Message)
     }
     messages.last
+  }
+
+  def clean: Conversation = {
+    val cleaned = new Conversation(messages)
+    val blankMessages = new ListBuffer[Message]
+    for (message <- cleaned.messages) {
+      message.clean()
+      if (message.isBlank) {
+        blankMessages += message
+      }
+    }
+    cleaned.messages --= blankMessages
+    cleaned
   }
 
   override def toString: String = {

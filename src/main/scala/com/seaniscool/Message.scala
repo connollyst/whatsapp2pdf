@@ -31,6 +31,9 @@ class Message(val lines: ListBuffer[Line]) {
     * @return the first line
     */
   def firstLine: Line = {
+    if (lines.isEmpty) {
+      throw new RuntimeException("Can't get first line of message with no lines.")
+    }
     lines.head
   }
 
@@ -51,6 +54,19 @@ class Message(val lines: ListBuffer[Line]) {
     firstLine.user.getOrElse("")
   }
 
+  def clean(): Message = {
+    val cleaned = new Message(lines)
+    val linesToExclude = new ListBuffer[Line]
+    for (line <- cleaned.lines) {
+      if (line.isExcludable) {
+        Log.debug("Excluding " + line)
+        linesToExclude += line
+      }
+    }
+    cleaned.lines --= linesToExclude
+    cleaned.trim()
+  }
+
   /** Trim leading and trailing blank lines from the message. Blank lines in the
     * message are preserved.
     *
@@ -60,7 +76,7 @@ class Message(val lines: ListBuffer[Line]) {
     */
   def trim(): Message = {
     val trimmed = new Message(lines)
-    while (trimmed.lines.last.isBlank) {
+    while (!trimmed.lines.isEmpty && trimmed.lines.last.isBlank) {
       trimmed.lines.trimEnd(1)
     }
     trimmed
