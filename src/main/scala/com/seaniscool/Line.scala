@@ -2,7 +2,7 @@ package com.seaniscool
 
 import java.text.SimpleDateFormat
 import java.util.Date
-import java.util.regex.{Matcher, Pattern}
+import java.util.regex.{Pattern, Matcher}
 import com.google.common.base.Objects
 
 /** A line of raw text to be parsed.
@@ -25,7 +25,12 @@ class Line(text: String, val number: Int) {
   }
 
   def isExcludable: Boolean = {
-    getExclusionMatcher.find()
+    for (pattern <- LinesToExclude.PATTERNS) {
+      if (pattern.matcher(text).find) {
+        return true
+      }
+    }
+    false
   }
 
   def containsDate: Boolean = {
@@ -81,10 +86,6 @@ class Line(text: String, val number: Int) {
     Line.USER_REGEX.matcher(stripped)
   }
 
-  private def getExclusionMatcher: Matcher = {
-    Line.IGNORE_REGEX.matcher(text)
-  }
-
   override def toString: String = {
     Objects.toStringHelper(getClass)
       .add("number", number)
@@ -99,6 +100,17 @@ object Line {
   private val DATE_FORMAT = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss")
   private val DATE_REGEX = Pattern.compile("(\\d{2}/\\d{2}/\\d{2} \\d{2}:\\d{2}:\\d{2})")
   private val USER_REGEX = Pattern.compile(": ([^:]*):")
-  private val IGNORE_REGEX = Pattern.compile("<media omitted>$")
+
+}
+
+object LinesToExclude {
+
+  val PATTERNS = List(
+    Pattern.compile("<media omitted>$"),
+    Pattern.compile("<media omitted>$"),
+    Pattern.compile("<vCard omitted>$"),
+    Pattern.compile("vCard attached:.*\\.vcf$"),
+    Pattern.compile("location: https?://maps.google.com/?q=\\d+\\.\\d+,\\d+\\.\\d+")
+  )
 
 }
