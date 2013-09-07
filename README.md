@@ -5,8 +5,13 @@ WhatsApp2PDF is a command line utility, written in Scala, to process WhatsApp
 conversation dumps to formatted PDF.
 
 
-Use
----
+Use - Mac
+---------
+
+Open Mac's command line terminal (Applications > Utilities > Terminal) and
+navigate to whatsapp2pdf, for example:
+
+    cd ~/Dropbox/whatsapp2pdf/
 
 The simplest use case is to run the tool on a single file:
 
@@ -24,6 +29,10 @@ current directory.
 You can specify the output directory with the `-o` flag:
 
     ./whatsapp2pdf file.txt -o pdfs/
+
+
+Use - Windows
+-------------
 
 
 Input Format
