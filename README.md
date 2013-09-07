@@ -10,20 +10,20 @@ Use
 
 The simplest use case is to run the tool on a single file:
 
-    java whatsapp2pdf.jar file.txt
+    java -jar whatsapp2pdf.jar file.txt
 
 This will produce `file.pdf` in your current directory.
 
 You can hand _whatsapp2pdf_ any number of files:
 
-    java whatsapp2pdf.jar file_1.txt file_2.txt file_3.txt
+    java -jar whatsapp2pdf.jar file_1.txt file_2.txt file_3.txt
 
 Which will result in `file_1.pdf`, `file_2.pdf`, and `file_3.pdf` in your
 current directory.
 
 You can specify the output directory with the `-o` flag:
 
-    java whatsapp2pdf.jar file.txt -o pdfs/
+    java -jar whatsapp2pdf.jar file.txt -o pdfs/
 
 
 Input Format
