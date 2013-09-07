@@ -12,8 +12,9 @@ object CommandLine {
   def main(args: Array[String]) {
     try {
       parseArgs(args)
-      val parser = new WhatsAppParser(CommandLineArgs.outputDirectory)
-      val writer = new PDFWriter(CommandLineArgs.outputDirectory)
+      val outputDirectory = CommandLineArgs.outputDirectory
+      val parser = new WhatsAppParser(outputDirectory)
+      val writer = new PDFWriter(outputDirectory)
       for (file <- CommandLineArgs.whatsAppFiles) {
         val conversation = parser.parse(file)
         writer.write(file, conversation)
@@ -23,7 +24,7 @@ object CommandLine {
         if (CommandLineArgs.debugMode) {
           e.printStackTrace()
         } else {
-          println("Error: " + e.getMessage)
+          System.err.println("Error: " + e.getMessage)
         }
     }
   }
