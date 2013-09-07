@@ -45,10 +45,12 @@ object CommandLineArgs {
     * @return the output directory
     */
   def outputDirectory: File = {
-    if (!_outputDirectory.isEmpty) {
-      _outputDirectory.get(0)
+    if (_outputDirectory == null || _outputDirectory.isEmpty) {
+      val workingDirectory = System.getProperty("user.dir")
+      Log.debug("Defaulting output directory to " + workingDirectory)
+      new File(workingDirectory)
     } else {
-      new File(System.getProperty("user.dir"))
+      _outputDirectory.get(0)
     }
   }
 
