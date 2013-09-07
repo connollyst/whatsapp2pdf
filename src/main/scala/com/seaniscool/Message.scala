@@ -58,7 +58,7 @@ class Message(val lines: ListBuffer[Line]) {
     val cleaned = new Message(lines)
     val linesToExclude = new ListBuffer[Line]
     for (line <- cleaned.lines) {
-      if (line.isExcludable) {
+      if (!line.isPrintable) {
         Log.debug("Excluding " + line)
         linesToExclude += line
       }

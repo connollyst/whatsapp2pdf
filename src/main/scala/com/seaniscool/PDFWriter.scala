@@ -16,9 +16,7 @@ import scala.collection.mutable
   *
   * @author Sean Connolly
   */
-class PDFWriter(directory: File) {
-
-  private val colorMap = new mutable.HashMap[String, Font]
+class PDFWriter(outputDirectory: File) {
 
   /** Write the [[com.seaniscool.Conversation]] to a PDF file with the suggested
     * file name in the directory specified for this writer.
@@ -26,23 +24,25 @@ class PDFWriter(directory: File) {
     * Note: the name is used as a suggestion and may be altered if it clashes
     * with an existing file.
     *
-    * @param name suggested file name (without directory)
+    * @param sourceFile the source file, this is used to name the PDF and
+    *                   resolve attachments
     * @param conversation the conversation to write
     */
-  def write(name: String, conversation: Conversation) {
-    colorMap.clear()
+  def write(sourceFile: File, conversation: Conversation) {
+    val sourceDirectory = sourceFile.getParentFile
+    val name = sourceFile.getName
     val document = createDocument(name)
-    document.open()
+    val pdf = new PDF(document, sourceDirectory)
     var lastDate: Option[Date] = None
     for (message <- conversation.clean.messages) {
       val nextDate = message.date
       if (!lastDate.isDefined || isNewDay(lastDate.get, nextDate)) {
         lastDate = Some(nextDate)
-        addDate(document, nextDate)
+        pdf.addDate(document, nextDate)
       }
-      addMessage(document, message)
+      pdf.addMessage(document, message)
     }
-    document.close()
+    pdf.close()
   }
 
   def createDocument(name: String): Document = {
@@ -65,11 +65,11 @@ class PDFWriter(directory: File) {
     */
   private def getFile(filename: String): File = {
     val name = Files.getNameWithoutExtension(filename)
-    var file = new File(directory, name + ".pdf")
+    var file = new File(outputDirectory, name + ".pdf")
     var counter = 0
     while (file.exists()) {
       counter += 1
-      file = new File(directory, name + " (" + counter + ").pdf")
+      file = new File(outputDirectory, name + " (" + counter + ").pdf")
     }
     file
   }
@@ -93,75 +93,14 @@ class PDFWriter(directory: File) {
     lastDay != nextDay && lastYear != nextYear
   }
 
-  private def addDate(document: Document, date: Date) {
-    val paragraph = new Paragraph()
-    paragraph.setAlignment(Element.ALIGN_CENTER)
-    add(paragraph, PDFWriter.DATE.format(date))
-    document.add(paragraph)
-  }
-
-  private def addMessage(document: Document, message: Message) {
-    val paragraph = new Paragraph()
-    addUser(paragraph, message)
-    addTime(paragraph, message)
-    add(paragraph, ":")
-    addBody(paragraph, message)
-    document.add(paragraph)
-  }
-
-
-  private def addUser(paragraph: Paragraph, message: Message) {
-    val user = message.user
-    val style = userStyle(user)
-    if (!user.isEmpty) {
-      add(paragraph, user + " ", style)
-    }
-  }
-
-  private def addTime(paragraph: Paragraph, message: Message) {
-    add(paragraph, PDFWriter.TIME.format(message.date))
-  }
-
-  private def addBody(paragraph: Paragraph, message: Message) {
-    for (line <- message.lines)
-      add(paragraph, line.body)
-  }
-
-  private def add(paragraph: Paragraph, text: String) {
-    add(paragraph, text, PDFWriter.FONT)
-  }
-
-  private def add(paragraph: Paragraph, text: String, font: Font) {
-    Log.debug("Printing " + text)
-    val phrase = new Chunk(text)
-    phrase.setFont(font)
-    paragraph.add(phrase)
-  }
-
-  private def userStyle(user: String): Font = {
-    if (!colorMap.contains(user)) {
-      colorMap.put(user, createUserStyle(user))
-    }
-    colorMap.get(user).get
-  }
-
-  private def createUserStyle(user: String): Font = {
-    val users = colorMap.size
-    val colorIndex = (users + 1) % PDFWriter.COLORS.size
-    val color = PDFWriter.COLORS(colorIndex)
-    val font = new Font(PDFWriter.FONT)
-    font.setColor(Color.decode(color))
-    Log.debug("Created user style for " + user + ": " + color)
-    font
-  }
 
 }
 
 object PDFWriter {
 
-  private val DATE = new SimpleDateFormat("dd/ww/yy")
-  private val TIME = new SimpleDateFormat("kk'h'mm")
-  private val MARGIN = margin(1)
+  val DATE = new SimpleDateFormat("dd/ww/yy")
+  val TIME = new SimpleDateFormat("kk'h'mm")
+  val MARGIN = margin(1)
 
   private def margin(inches: Int): Int = {
     // val inches = cm / 2.54
@@ -177,8 +116,8 @@ object PDFWriter {
   //  FontFactory.register(FONT_RESOURCE.getFile, FONT_NAME)
   //  private val FONT = FontFactory.getFont(FONT_NAME)
   //  FONT.setSize(6)
-  private val FONT = new Font(Font.HELVETICA)
-  private val COLORS = List(
+  val FONT = new Font(Font.HELVETICA)
+  val COLORS = List(
     "#FF0000",
     "#00C000",
     "#0000FF",
