@@ -48,7 +48,8 @@ class PDFWriter(outputDirectory: File) {
   def createDocument(name: String): Document = {
     val document = new Document(PageSize.A5,
       PDFWriter.MARGIN, PDFWriter.MARGIN, PDFWriter.MARGIN, PDFWriter.MARGIN)
-    PdfWriter.getInstance(document, new FileOutputStream(getFile(name)))
+    val writer = PdfWriter.getInstance(document, new FileOutputStream(getFile(name)))
+    writer.setStrictImageSequence(true)
     document
   }
 
