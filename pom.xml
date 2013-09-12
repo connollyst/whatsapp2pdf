@@ -6,7 +6,7 @@
 
     <groupId>com.seaniscool</groupId>
     <artifactId>whatsapp2pdf</artifactId>
-    <version>1.0-SNAPSHOT</version>
+    <version>2.0-SNAPSHOT</version>
 
     <developers>
         <developer>
@@ -15,6 +15,11 @@
             <url>www.seaniscool.com</url>
         </developer>
     </developers>
+
+    <organization>
+        <name>sean is cool, ltd.</name>
+        <url>www.seaniscool.com</url>
+    </organization>
 
     <repositories>
         <repository>
@@ -55,6 +60,18 @@
                     </jvmArgs>
                 </configuration>
             </plugin>
+            <!-- Build as a JavaFX app -->
+            <plugin>
+                <groupId>com.zenjava</groupId>
+                <artifactId>javafx-maven-plugin</artifactId>
+                <version>2.0</version>
+                <configuration>
+                    <mainClass>
+                        com.seaniscool.WhatsApplication
+                    </mainClass>
+                </configuration>
+            </plugin>
+            <!-- Build all dependencies into a single jar -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-assembly-plugin</artifactId>
@@ -68,11 +85,15 @@
                         <configuration>
                             <appendAssemblyId>false</appendAssemblyId>
                             <descriptorRefs>
-                                <descriptorRef>jar-with-dependencies</descriptorRef>
+                                <descriptorRef>
+                                    jar-with-dependencies
+                                </descriptorRef>
                             </descriptorRefs>
                             <archive>
                                 <manifest>
-                                    <mainClass>com.seaniscool.CommandLine</mainClass>
+                                    <mainClass>
+                                        com.seaniscool.CommandLine
+                                    </mainClass>
                                 </manifest>
                             </archive>
                         </configuration>
@@ -94,6 +115,12 @@
             <artifactId>scala-compiler</artifactId>
             <version>2.10.0</version>
             <scope>compile</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.scalafx</groupId>
+            <artifactId>scalafx_2.10</artifactId>
+            <version>1.0.0-M4</version>
         </dependency>
 
         <dependency>
