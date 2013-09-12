@@ -1,4 +1,4 @@
-package com.seaniscool
+package com.seaniscool.whatsapp2pdf.parser
 
 import scala.collection.mutable.ListBuffer
 

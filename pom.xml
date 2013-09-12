@@ -67,7 +67,7 @@
                 <version>2.0</version>
                 <configuration>
                     <mainClass>
-                        com.seaniscool.WhatsApplication
+                        com.seaniscool.whatsapp2pdf.WhatsApp2PDF
                     </mainClass>
                 </configuration>
             </plugin>

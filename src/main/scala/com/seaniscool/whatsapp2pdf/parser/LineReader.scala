@@ -1,4 +1,4 @@
-package com.seaniscool
+package com.seaniscool.whatsapp2pdf.parser
 
 import com.google.common.base.Charsets
 import com.google.common.io.Files

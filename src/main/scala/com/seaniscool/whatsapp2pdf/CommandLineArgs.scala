@@ -1,9 +1,9 @@
-package com.seaniscool
+package com.seaniscool.whatsapp2pdf
 
-import com.beust.jcommander.{IStringConverter, Parameter}
-import scala.collection.JavaConversions._
-import java.io.File
 import com.beust.jcommander.converters.FileConverter
+import com.beust.jcommander.{IStringConverter, Parameter}
+import java.io.File
+import scala.collection.JavaConversions._
 
 /** Command line arguments.
   * This object is passed to [[com.beust.jcommander.JCommander]] to be filled

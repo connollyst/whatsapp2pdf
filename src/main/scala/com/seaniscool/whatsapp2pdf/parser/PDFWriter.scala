@@ -1,24 +1,22 @@
-package com.seaniscool
+package com.seaniscool.whatsapp2pdf.parser
 
 import com.google.common.io.Files
 import com.lowagie.text._
 import com.lowagie.text.pdf.PdfWriter
-import java.awt.Color
 import java.io.{File, FileOutputStream}
 import java.text.SimpleDateFormat
 import java.util.{Calendar, Date}
 import scala.List
 import scala.Some
-import scala.collection.mutable
 
 
-/** Writes a [[com.seaniscool.Conversation]] to PDF.
+/** Writes a [[com.seaniscool.whatsapp2pdf.parser.Conversation]] to PDF.
   *
   * @author Sean Connolly
   */
 class PDFWriter(outputDirectory: File) {
 
-  /** Write the [[com.seaniscool.Conversation]] to a PDF file with the suggested
+  /** Write the [[com.seaniscool.whatsapp2pdf.parser.Conversation]] to a PDF file with the suggested
     * file name in the directory specified for this writer.
     *
     * Note: the name is used as a suggestion and may be altered if it clashes

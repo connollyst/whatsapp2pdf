@@ -1,10 +1,11 @@
-package com.seaniscool
+package com.seaniscool.whatsapp2pdf.parser
 
-import scala.collection.mutable.ListBuffer
+import com.seaniscool.whatsapp2pdf.Log
 import java.util.Date
+import scala.collection.mutable.ListBuffer
 
-/** A message the unit of a [[com.seaniscool.Conversation]], consisting of a
-  * date, a user name, and one or more [[com.seaniscool.Line]]s.
+/** A message the unit of a [[com.seaniscool.whatsapp2pdf.parser.Conversation]], consisting of a
+  * date, a user name, and one or more [[com.seaniscool.whatsapp2pdf.parser.Line]]s.
   *
   * @author Sean Connolly
   */

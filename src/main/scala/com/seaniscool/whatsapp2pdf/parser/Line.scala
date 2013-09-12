@@ -1,9 +1,9 @@
-package com.seaniscool
+package com.seaniscool.whatsapp2pdf.parser
 
+import com.google.common.base.Objects
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.regex.{Pattern, Matcher}
-import com.google.common.base.Objects
 
 /** A line of raw text to be parsed.
   * May be the start of a message or not, may even be a blank line.

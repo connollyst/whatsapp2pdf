@@ -1,4 +1,4 @@
-package com.seaniscool
+package com.seaniscool.whatsapp2pdf
 
 /** We don't do any real logging in this application.
   * This logger lets us print debug statements to standard out if debugging is

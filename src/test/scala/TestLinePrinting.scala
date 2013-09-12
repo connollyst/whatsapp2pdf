@@ -1,9 +1,9 @@
-import com.seaniscool.Line
+import com.seaniscool.whatsapp2pdf.parser.Line
 import org.junit.runner.RunWith
 import org.scalatest._
 import org.scalatest.junit.JUnitRunner
 
-/** Test how well the [[com.seaniscool.Line]] determines if it should be printed
+/** Test how well the [[Line]] determines if it should be printed
   * or not.
   *
   * Note: vCards aren't omitted as media on Android

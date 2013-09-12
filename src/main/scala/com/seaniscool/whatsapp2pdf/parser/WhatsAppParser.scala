@@ -1,8 +1,9 @@
-package com.seaniscool
+package com.seaniscool.whatsapp2pdf.parser
 
+import com.seaniscool.whatsapp2pdf.Log
 import java.io.File
 
-/** The parser, transforms raw text to a [[com.seaniscool.Conversation]].
+/** The parser, transforms raw text to a [[com.seaniscool.whatsapp2pdf.parser.Conversation]].
   *
   * @author Sean Connolly
   */
