@@ -8,7 +8,7 @@ import javafx.stage.Stage
 class WhatsApp2PDF extends Application {
 
   override def start(primaryStage: Stage) {
-    val ide = new Controller
+    val ide = new Controller(primaryStage)
     primaryStage.setTitle("WhatsApp2PDF")
     primaryStage.setWidth(800)
     primaryStage.setHeight(600)
