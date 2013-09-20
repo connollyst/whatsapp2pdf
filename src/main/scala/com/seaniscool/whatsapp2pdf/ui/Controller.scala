@@ -8,6 +8,10 @@ import javafx.scene.Group
 import javafx.scene.control.{Label, ListView}
 import javafx.stage.{DirectoryChooser, Stage, FileChooser}
 import java.awt.Desktop
+import javafx.event.EventHandler
+import javafx.scene.input.{TransferMode, MouseDragEvent, MouseEvent, DragEvent}
+import javafx.scene.paint.Color
+import com.google.common.io.Files
 
 /** The controller for the WhatsApp2PDF JavaFX UI.
   *
@@ -31,17 +35,37 @@ class Controller(primaryStage: Stage) extends Group {
 
 
   def initialize() = {
-    println("sourceListView: " + sourceListView)
-    println("targetListView: " + targetListView)
     targetDirectory = new File(System.getProperty("user.home"))
     refreshTargetDirectoryLabel()
+    sourceListView.setOnDragDropped(new EventHandler[DragEvent] {
+      override def handle(event: DragEvent) = {
+        for (file <- event.getDragboard.getFiles) {
+          val extension = Files.getFileExtension(file.getName)
+          if ("txt".equalsIgnoreCase(extension)) {
+            sourceListView.getItems.add(new WhatsAppFile(file))
+          }
+        }
+      }
+    })
+    sourceListView.setOnDragEntered(new EventHandler[DragEvent] {
+      override def handle(event: DragEvent) = {
+        sourceListView.setStyle("-fx-border-color: blue;")
+      }
+    })
+    sourceListView.setOnDragExited(new EventHandler[DragEvent] {
+      override def handle(event: DragEvent) = {
+        sourceListView.setStyle("-fx-border-color: black;")
+      }
+    })
+    sourceListView.setOnDragOver(new EventHandler[DragEvent] {
+      override def handle(event: DragEvent) = {
+        event.acceptTransferModes(TransferMode.COPY)
+      }
+    })
   }
 
   @FXML
   protected def addSourceFile() = {
-    println("sourceListView: " + sourceListView)
-    println("sourceListView.items: " + sourceListView.getItems)
-    val items = sourceListView.getItems
     val chooser = new FileChooser()
     val filter = new FileChooser.ExtensionFilter("TXT files (*.txt)", "*.txt")
     chooser.getExtensionFilters.add(filter)
@@ -49,12 +73,7 @@ class Controller(primaryStage: Stage) extends Group {
     val files = chooser.showOpenMultipleDialog(primaryStage)
     if (files != null) {
       files.foreach(
-        file => {
-          println(new WhatsAppFile(file))
-          println(sourceListView)
-          println(sourceListView.getItems)
-          sourceListView.getItems.add(new WhatsAppFile(file))
-        }
+        file => sourceListView.getItems.add(new WhatsAppFile(file))
       )
     }
   }
