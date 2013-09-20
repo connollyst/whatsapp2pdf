@@ -1,14 +1,13 @@
 package com.seaniscool.whatsapp2pdf.ui
 
+import collection.JavaConversions._
+import com.seaniscool.whatsapp2pdf.parser.{PDFWriter, WhatsAppParser}
+import java.io.{IOException, File}
 import javafx.fxml.{FXML, FXMLLoader}
 import javafx.scene.Group
-import javafx.scene.control.{Label, ListView, TableView}
-import java.io.File
+import javafx.scene.control.{Label, ListView}
 import javafx.stage.{DirectoryChooser, Stage, FileChooser}
-import com.seaniscool.whatsapp2pdf.{CommandLineArgs, Log}
-import javafx.beans.value.ObservableValue
-import javafx.beans.property.SimpleStringProperty
-import com.seaniscool.whatsapp2pdf.parser.{PDFWriter, WhatsAppParser}
+import java.awt.Desktop
 
 /** The controller for the WhatsApp2PDF JavaFX UI.
   *
@@ -22,29 +21,42 @@ class Controller(primaryStage: Stage) extends Group {
   loader.setController(this)
   loader.load()
 
-  private var targetDirectory: File = _
+  var targetDirectory: File = _
   @FXML
-  private var targetDirectoryLabel: Label = _
+  var targetDirectoryLabel: Label = _
   @FXML
-  private var sourceListView: ListView[WhatsAppFile] = _
+  var sourceListView: ListView[WhatsAppFile] = _
   @FXML
-  private var targetListView: ListView[WhatsAppFile] = _
+  var targetListView: ListView[WhatsAppFile] = _
+
 
   def initialize() = {
+    println("sourceListView: " + sourceListView)
+    println("targetListView: " + targetListView)
     targetDirectory = new File(System.getProperty("user.home"))
     refreshTargetDirectoryLabel()
   }
 
   @FXML
   protected def addSourceFile() = {
-    val fileChooser = new FileChooser()
-    val extFilter = new FileChooser.ExtensionFilter("TXT files (*.txt)", "*.txt")
-    fileChooser.getExtensionFilters.add(extFilter)
-    val file = fileChooser.showOpenDialog(primaryStage)
-    println(sourceListView)
-    println(sourceListView.getItems)
-    println(file)
-    sourceListView.getItems.add(new WhatsAppFile(file))
+    println("sourceListView: " + sourceListView)
+    println("sourceListView.items: " + sourceListView.getItems)
+    val items = sourceListView.getItems
+    val chooser = new FileChooser()
+    val filter = new FileChooser.ExtensionFilter("TXT files (*.txt)", "*.txt")
+    chooser.getExtensionFilters.add(filter)
+    chooser.setTitle("Choose Text Files")
+    val files = chooser.showOpenMultipleDialog(primaryStage)
+    if (files != null) {
+      files.foreach(
+        file => {
+          println(new WhatsAppFile(file))
+          println(sourceListView)
+          println(sourceListView.getItems)
+          sourceListView.getItems.add(new WhatsAppFile(file))
+        }
+      )
+    }
   }
 
   @FXML
@@ -70,12 +82,25 @@ class Controller(primaryStage: Stage) extends Group {
     val chooser = new DirectoryChooser
     chooser.setTitle("Output Directory")
     chooser.setInitialDirectory(targetDirectory)
-    targetDirectory = chooser.showDialog(primaryStage)
-    refreshTargetDirectoryLabel()
+    val directory = chooser.showDialog(primaryStage)
+    if (directory != null) {
+      targetDirectory = directory
+      refreshTargetDirectoryLabel()
+    }
   }
 
   private def refreshTargetDirectoryLabel() = {
     targetDirectoryLabel.setText(targetDirectory.getAbsolutePath)
+  }
+
+  private def openFile(file: File) = {
+    if (Desktop.isDesktopSupported) {
+      //      try {
+      Desktop.getDesktop.open(file)
+      //      } catch (IOException ex) {
+      // no application registered for PDFs
+      //      }
+    }
   }
 
 }
