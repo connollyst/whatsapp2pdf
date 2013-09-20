@@ -21,7 +21,7 @@ class Controller(primaryStage: Stage) extends Group {
   loader.setController(this)
   loader.load()
 
-  private var targetDirectory: SimpleFileProperty = _
+  private var targetDirectory: File = _
   @FXML
   private var targetDirectoryLabel: Label = _
   @FXML
@@ -30,10 +30,8 @@ class Controller(primaryStage: Stage) extends Group {
   private var targetListView: ListView[WhatsAppFile] = _
 
   def initialize() = {
-    targetDirectory = new SimpleFileProperty()
-    println("Target Directory: " + targetDirectory)
-    targetDirectory.setFile(System.getProperty("user.dir"))
-    targetDirectoryLabel.textProperty().bind(targetDirectory)
+    targetDirectory = new File(System.getProperty("user.home"))
+    refreshTargetDirectoryLabel()
   }
 
   @FXML
@@ -63,8 +61,13 @@ class Controller(primaryStage: Stage) extends Group {
   protected def changeTargetDirectory() {
     val chooser = new DirectoryChooser
     chooser.setTitle("Output Directory")
-    chooser.setInitialDirectory(targetDirectory.getFile)
-    targetDirectory.setFile(chooser.showDialog(primaryStage))
+    chooser.setInitialDirectory(targetDirectory)
+    targetDirectory = chooser.showDialog(primaryStage)
+    refreshTargetDirectoryLabel()
+  }
+
+  private def refreshTargetDirectoryLabel() = {
+    targetDirectoryLabel.setText(targetDirectory.getAbsolutePath)
   }
 
 }
