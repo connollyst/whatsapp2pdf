@@ -1,18 +1,27 @@
 package com.seaniscool.whatsapp2pdf
 
-import javafx.fxml.FXMLLoader
-import scalafx.application.JFXApp
-import scalafx.scene.Scene
+import com.seaniscool.whatsapp2pdf.ui.Controller
+import javafx.application.Application
+import javafx.scene.Scene
+import javafx.stage.Stage
 
-object WhatsApp2PDF extends JFXApp {
+class WhatsApp2PDF extends Application {
 
-  val root = FXMLLoader.load(getClass.getResource("whatsapp2pdf.fxml"))
-  val scene2 = new Scene(root, 300, 275)
-
-  stage = new JFXApp.PrimaryStage {
-    title = "WhatsApp2PDF"
-    width = 600
-    height = 450
-    scene = scene2
+  override def start(primaryStage: Stage) {
+    val ide = new Controller
+    primaryStage.setTitle("WhatsApp2PDF")
+    primaryStage.setWidth(800)
+    primaryStage.setHeight(600)
+    primaryStage.setScene(new Scene(ide))
+    primaryStage.show()
   }
+
+}
+
+object WhatsApp2PDF {
+
+  def main(args: Array[String]) {
+    Application.launch(classOf[WhatsApp2PDF], args: _*)
+  }
+
 }
