@@ -26,10 +26,11 @@ class PDFWriter(outputDirectory: File) {
     *                   resolve attachments
     * @param conversation the conversation to write
     */
-  def write(sourceFile: File, conversation: Conversation) {
+  def write(sourceFile: File, conversation: Conversation): File = {
     val sourceDirectory = sourceFile.getParentFile
     val name = sourceFile.getName
-    val document = createDocument(name)
+    val targetFile = getFile(name)
+    val document = createDocument(targetFile)
     val pdf = new PDF(document, sourceDirectory)
     var lastDate: Option[Date] = None
     for (message <- conversation.clean.messages) {
@@ -41,12 +42,13 @@ class PDFWriter(outputDirectory: File) {
       pdf.addMessage(document, message)
     }
     pdf.close()
+    targetFile
   }
 
-  def createDocument(name: String): Document = {
+  def createDocument(file: File): Document = {
     val document = new Document(PageSize.A5,
       PDFWriter.MARGIN, PDFWriter.MARGIN, PDFWriter.MARGIN, PDFWriter.MARGIN)
-    val writer = PdfWriter.getInstance(document, new FileOutputStream(getFile(name)))
+    val writer = PdfWriter.getInstance(document, new FileOutputStream(file))
     writer.setStrictImageSequence(true)
     document
   }

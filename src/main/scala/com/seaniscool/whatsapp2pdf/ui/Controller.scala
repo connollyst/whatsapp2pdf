@@ -5,9 +5,10 @@ import javafx.scene.Group
 import javafx.scene.control.{Label, ListView, TableView}
 import java.io.File
 import javafx.stage.{DirectoryChooser, Stage, FileChooser}
-import com.seaniscool.whatsapp2pdf.Log
+import com.seaniscool.whatsapp2pdf.{CommandLineArgs, Log}
 import javafx.beans.value.ObservableValue
 import javafx.beans.property.SimpleStringProperty
+import com.seaniscool.whatsapp2pdf.parser.{PDFWriter, WhatsAppParser}
 
 /** The controller for the WhatsApp2PDF JavaFX UI.
   *
@@ -48,12 +49,16 @@ class Controller(primaryStage: Stage) extends Group {
 
   @FXML
   protected def convertFiles() = {
+    val parser = new WhatsAppParser(targetDirectory)
+    val writer = new PDFWriter(targetDirectory)
     val sourceFiles = sourceListView.getItems.iterator
     while (sourceFiles.hasNext) {
-      val sourceFile = sourceFiles.next()
+      val sourceFile = sourceFiles.next().getFile
       println("Converting " + sourceFile)
+      val conversation = parser.parse(sourceFile)
+      val targetFile = writer.write(sourceFile, conversation)
       sourceFiles.remove()
-      targetListView.getItems.add(sourceFile)
+      targetListView.getItems.add(new WhatsAppFile(targetFile))
     }
   }
 

@@ -21,5 +21,7 @@ class WhatsAppFile(path: SimpleStringProperty) {
 
   def setPath(path: String) = this.path.setValue(path)
 
+  def getFile = new File(path.get())
+
   override def toString: String = path.get()
 }
