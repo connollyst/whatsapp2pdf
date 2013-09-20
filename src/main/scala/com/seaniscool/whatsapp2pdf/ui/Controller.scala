@@ -54,12 +54,15 @@ class Controller(primaryStage: Stage) extends Group {
     val sourceFiles = sourceListView.getItems.iterator
     while (sourceFiles.hasNext) {
       val sourceFile = sourceFiles.next().getFile
-      println("Converting " + sourceFile)
-      val conversation = parser.parse(sourceFile)
-      val targetFile = writer.write(sourceFile, conversation)
+      convertFile(sourceFile, parser, writer)
       sourceFiles.remove()
-      targetListView.getItems.add(new WhatsAppFile(targetFile))
     }
+  }
+
+  private def convertFile(sourceFile: File, parser: WhatsAppParser, writer: PDFWriter) = {
+    val conversation = parser.parse(sourceFile)
+    val targetFile = writer.write(sourceFile, conversation)
+    targetListView.getItems.add(new WhatsAppFile(targetFile))
   }
 
   @FXML
