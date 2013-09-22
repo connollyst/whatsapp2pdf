@@ -12,6 +12,7 @@ import javafx.event.EventHandler
 import javafx.scene.input.{TransferMode, MouseDragEvent, MouseEvent, DragEvent}
 import javafx.scene.paint.Color
 import com.google.common.io.Files
+import com.seaniscool.whatsapp2pdf.Directory
 
 /** The controller for the WhatsApp2PDF JavaFX UI.
   *
@@ -35,7 +36,7 @@ class Controller(primaryStage: Stage) extends Group {
 
 
   def initialize() = {
-    targetDirectory = new File(System.getProperty("user.home"))
+    targetDirectory = Directory.desktop()
     refreshTargetDirectoryLabel()
     sourceListView.setOnDragDropped(new EventHandler[DragEvent] {
       override def handle(event: DragEvent) = {

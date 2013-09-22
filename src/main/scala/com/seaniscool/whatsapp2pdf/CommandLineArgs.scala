@@ -46,9 +46,9 @@ object CommandLineArgs {
     */
   def outputDirectory: File = {
     if (_outputDirectory == null || _outputDirectory.isEmpty) {
-      val workingDirectory = System.getProperty("user.dir")
-      Log.debug("Defaulting output directory to " + workingDirectory)
-      new File(workingDirectory)
+      val defaultDirectory = Directory.current()
+      Log.debug("Defaulting output directory to " + defaultDirectory.getAbsolutePath)
+      defaultDirectory
     } else {
       _outputDirectory.get(0)
     }
