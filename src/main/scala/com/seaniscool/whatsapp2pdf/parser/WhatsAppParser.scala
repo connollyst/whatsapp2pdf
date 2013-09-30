@@ -1,16 +1,14 @@
 package com.seaniscool.whatsapp2pdf.parser
 
-import com.seaniscool.whatsapp2pdf.Log
 import java.io.File
 
 /** The parser, transforms raw text to a [[com.seaniscool.whatsapp2pdf.parser.Conversation]].
   *
   * @author Sean Connolly
   */
-class WhatsAppParser(outputDirectory: File) {
+class WhatsAppParser {
 
   def parse(file: File): Conversation = {
-    Log.info("Parsing " + file + " to " + outputDirectory)
     val conversation = new Conversation
     val reader = LineReader.newReader(file)
     while (reader.ready()) {

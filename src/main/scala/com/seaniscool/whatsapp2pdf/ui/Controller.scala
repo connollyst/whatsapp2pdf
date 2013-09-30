@@ -81,7 +81,7 @@ class Controller(primaryStage: Stage) extends Group {
 
   @FXML
   protected def convertFiles() = {
-    val parser = new WhatsAppParser(targetDirectory)
+    val parser = new WhatsAppParser()
     val writer = new PDFWriter(targetDirectory)
     val sourceFiles = sourceListView.getItems.iterator
     while (sourceFiles.hasNext) {

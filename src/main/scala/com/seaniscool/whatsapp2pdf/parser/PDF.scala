@@ -58,7 +58,7 @@ class PDF(document: Document, imagesDirectory: File) {
       if (line.isSupportedImage) {
         addImage(line)
       } else {
-        add(paragraph, line.body)
+        add(paragraph, line.body.getOrElse(""))
       }
   }
 

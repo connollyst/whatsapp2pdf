@@ -14,7 +14,7 @@ object CommandLine {
     try {
       parseArgs(args)
       val outputDirectory = CommandLineArgs.outputDirectory
-      val parser = new WhatsAppParser(outputDirectory)
+      val parser = new WhatsAppParser()
       val writer = new PDFWriter(outputDirectory)
       for (file <- CommandLineArgs.whatsAppFiles) {
         val conversation = parser.parse(file)

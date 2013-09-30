@@ -4,6 +4,8 @@ import com.google.common.base.Objects
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.regex.{Pattern, Matcher}
+import scala.Predef._
+import scala.Some
 
 /** A line of raw text to be parsed.
   * May be the start of a message or not, may even be a blank line.
@@ -12,17 +14,48 @@ import java.util.regex.{Pattern, Matcher}
   */
 class Line(text: String, val number: Int) {
 
-  val date = extractDate
-  val user = extractUser
-  val body = extractBody
+  println("Full:\t" + text)
 
+  private var _date: Option[Date] = None
+  private var _user: Option[String] = None
+  private var _body: Option[String] = None
+
+  val matcher = Line.REGEX_IOS.matcher(text)
+  if (matcher.find) {
+    _date = matcher.group(1) match {
+      case null => None
+      case _ => Some(Line.DATE_FORMAT.parse(matcher.group(1)))
+    }
+    println("Date:\t" + _date)
+
+    _user = matcher.group(3) match {
+      case null => None
+      case _ => Some(matcher.group(3))
+    }
+    println("User:\t" + _user)
+
+    _body = Some(matcher.group(4))
+    println("Body:\t" + _body)
+  }
+
+  def date = _date
+
+  def user = _user
+
+  def body = _body
+
+  /** Is this line the start of a new message?
+    * This is indicated by a date on the line.
+    *
+    * @return true if the line starts a new message
+    */
   def isNewMessage: Boolean = {
-    containsDate
+    _date.isDefined
   }
 
   /** Is this line blank?
     *
-    * @return
+    * @return true if the line is blank
     */
   def isBlank: Boolean = {
     text.trim.isEmpty
@@ -69,65 +102,17 @@ class Line(text: String, val number: Int) {
     false
   }
 
+  /** Returns the file name of the attached image on this line.
+    *
+    * @return the file name of the attachment
+    */
   def image: String = {
-    var fileName = body
+    var fileName = body.getOrElse(Line.NOTHING)
     for (pattern <- LinesWithAttachments.PATTERNS)
-      fileName = pattern.matcher(fileName).replaceAll("")
+      fileName = pattern.matcher(fileName).replaceAll(Line.NOTHING)
     fileName.trim
   }
 
-  def containsDate: Boolean = {
-    getDateMatcher.find
-  }
-
-  def stripDate: String = {
-    getDateMatcher.replaceFirst("")
-  }
-
-  private def extractDate: Option[Date] = {
-    val dateMatcher = getDateMatcher
-    if (dateMatcher.find) {
-      val date = dateMatcher.group(1)
-      Some(Line.DATE_FORMAT.parse(date))
-    } else {
-      None
-    }
-  }
-
-  def containsUser: Boolean = {
-    getUserMatcher.find
-  }
-
-  def stripDateAndUser: String = {
-    getUserMatcher.replaceFirst("")
-  }
-
-  def extractUser: Option[String] = {
-    val userMatcher = getUserMatcher
-    if (userMatcher.find) {
-      new Some(userMatcher.group(1))
-    } else {
-      None
-    }
-  }
-
-  def extractBody: String = {
-    val stripped = stripDateAndUser
-    if (!stripped.isEmpty) {
-      stripped
-    } else {
-      ""
-    }
-  }
-
-  private def getDateMatcher: Matcher = {
-    Line.DATE_REGEX.matcher(text)
-  }
-
-  private def getUserMatcher: Matcher = {
-    val stripped = stripDate
-    Line.USER_REGEX.matcher(stripped)
-  }
 
   override def toString: String = {
     Objects.toStringHelper(getClass)
@@ -140,10 +125,9 @@ class Line(text: String, val number: Int) {
 
 object Line {
 
-  private val DATE_FORMAT = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss")
-  private val DATE_REGEX = Pattern.compile("(\\d{2}/\\d{2}/\\d{2} \\d{2}:\\d{2}:\\d{2})")
-  private val USER_REGEX = Pattern.compile(": ([^:]*):")
-
+  private val NOTHING = ""
+  private val DATE_FORMAT = new SimpleDateFormat("dd/MM/yy HH:mm:ss")
+  private val REGEX_IOS = Pattern.compile("(\\d{2}/\\d{2}/\\d{2} \\d{2}:\\d{2}:\\d{2}): (([^“\\\":]*):)?\\s?(.*)")
 }
 
 private object LinesToExclude {
