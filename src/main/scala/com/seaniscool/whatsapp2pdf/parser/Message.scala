@@ -11,6 +11,16 @@ import scala.collection.mutable.ListBuffer
   */
 class Message(val lines: ListBuffer[Line]) {
 
+  def linesPrintable = {
+    val printable = new ListBuffer[Line]
+    for (line <- lines) {
+      if (line.isPrintable) {
+        printable += line
+      }
+    }
+    printable
+  }
+
   def this(line: Line) = {
     this(ListBuffer(line))
   }

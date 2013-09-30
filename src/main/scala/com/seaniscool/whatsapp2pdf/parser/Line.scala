@@ -3,7 +3,7 @@ package com.seaniscool.whatsapp2pdf.parser
 import com.google.common.base.Objects
 import java.text.SimpleDateFormat
 import java.util.Date
-import java.util.regex.{Pattern, Matcher}
+import java.util.regex.Pattern
 import scala.Predef._
 import scala.Some
 
@@ -14,28 +14,27 @@ import scala.Some
   */
 class Line(text: String, val number: Int) {
 
-  println("Full:\t" + text)
-
   private var _date: Option[Date] = None
   private var _user: Option[String] = None
   private var _body: Option[String] = None
 
   val matcher = Line.REGEX_IOS.matcher(text)
   if (matcher.find) {
-    _date = matcher.group(1) match {
+    val dateMatch = matcher.group(2)
+    val userMatch = matcher.group(4)
+    val bodyMatch = matcher.group(5)
+    _date = dateMatch match {
       case null => None
-      case _ => Some(Line.DATE_FORMAT.parse(matcher.group(1)))
+      case _ => Some(Line.DATE_FORMAT.parse(dateMatch))
     }
-    println("Date:\t" + _date)
-
-    _user = matcher.group(3) match {
+    _user = userMatch match {
       case null => None
-      case _ => Some(matcher.group(3))
+      case _ => Some(userMatch)
     }
-    println("User:\t" + _user)
-
-    _body = Some(matcher.group(4))
-    println("Body:\t" + _body)
+    _body = bodyMatch match {
+      case null => None
+      case _ => Some(bodyMatch)
+    }
   }
 
   def date = _date
@@ -75,6 +74,8 @@ class Line(text: String, val number: Int) {
     if (isAttachment)
       if (!isSupportedImage)
         return false
+    if (isBlank)
+      return false
     true
   }
 
@@ -127,7 +128,7 @@ object Line {
 
   private val NOTHING = ""
   private val DATE_FORMAT = new SimpleDateFormat("dd/MM/yy HH:mm:ss")
-  private val REGEX_IOS = Pattern.compile("(\\d{2}/\\d{2}/\\d{2} \\d{2}:\\d{2}:\\d{2}): (([^“\\\":]*):)?\\s?(.*)")
+  private val REGEX_IOS = Pattern.compile("((\\d{2}/\\d{2}/\\d{2} \\d{2}:\\d{2}:\\d{2}): (([^“\\\":]*):)?)?\\s?(.*)")
 }
 
 private object LinesToExclude {

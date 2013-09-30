@@ -23,68 +23,115 @@ class TestLineParsing extends FlatSpec with Matchers {
   }
 
   it should "correctly parse the 'renamed' announcement date" in {
-    assertLineDate("/conversations/renamed.txt", 0, 0, expectedDate)
+    assertDate("/conversations/renamed.txt", 0, 0, expectedDate)
   }
 
   it should "correctly parse the 'renamed' announcement user" in {
-    assertNoLineUser("/conversations/renamed.txt", 0, 0)
+    assertNoUser("/conversations/renamed.txt", 0, 0)
   }
 
   it should "correctly parse the 'renamed' announcement body" in {
-    assertLineBody("/conversations/renamed.txt", 0, 0, "You changed the subject to “:O”")
+    assertBody("/conversations/renamed.txt", 0, 0, "You changed the subject to “:O”")
   }
 
-  /* Conversation with 'You changed the subject..' line  */
+  /* Conversation with a few simple messages */
 
   it should "correctly parse simple conversation messages" in {
-    assertMessageCount("/conversations/simple.txt", 10)
+    assertMessageCount("/conversations/simple.txt", 5)
   }
+
   it should "correctly parse simple conversation users" in {
-    assertLineUser("/conversations/simple.txt", 0, 0, "UserA")
-    assertLineUser("/conversations/simple.txt", 1, 0, "UserA")
-    assertLineUser("/conversations/simple.txt", 2, 0, "UserB")
-    assertLineUser("/conversations/simple.txt", 3, 0, "UserA")
-    assertLineUser("/conversations/simple.txt", 4, 0, "UserB")
-    assertLineUser("/conversations/simple.txt", 5, 0, "UserA")
-    assertLineUser("/conversations/simple.txt", 6, 0, "UserA")
-    assertLineUser("/conversations/simple.txt", 7, 0, "UserC")
-    assertLineUser("/conversations/simple.txt", 8, 0, "UserD")
-    assertLineUser("/conversations/simple.txt", 9, 0, "UserB")
+    assertUser("/conversations/simple.txt", 0, 0, "UserA")
+    assertUser("/conversations/simple.txt", 1, 0, "UserB")
+    assertUser("/conversations/simple.txt", 2, 0, "UserC")
+    assertUser("/conversations/simple.txt", 3, 0, "UserD")
+    assertUser("/conversations/simple.txt", 4, 0, "UserE")
   }
 
-  /* Utility functions */
+  it should "correctly parse simple conversation body" in {
+    assertBody("/conversations/simple.txt", 0, 0, "Message 1")
+    assertBody("/conversations/simple.txt", 1, 0, "Message 2")
+    assertBody("/conversations/simple.txt", 2, 0, "Message 3")
+    assertBody("/conversations/simple.txt", 3, 0, "Message 4")
+    assertBody("/conversations/simple.txt", 4, 0, "Message 5")
+  }
 
-  private def assertLineDate(fileName: String, messageIndex: Int, lineIndex: Int, expectedDate: Date) = {
-    val line = getMessageLine(fileName, messageIndex, lineIndex)
-    line.containsDate should be(true)
+  /* Conversation with a message with multiple lines in it */
+
+  it should "correctly parse multiline conversation messages" in {
+    assertMessageCount("/conversations/multiline.txt", 5)
+  }
+
+  it should "correctly parse multiline conversation users" in {
+    assertUser("/conversations/multiline.txt", 0, 0, "UserA")
+    assertUser("/conversations/multiline.txt", 1, 0, "UserB")
+    assertUser("/conversations/multiline.txt", 2, 0, "UserC")
+    assertNoUser("/conversations/multiline.txt", 2, 1)
+    assertNoUser("/conversations/multiline.txt", 2, 2)
+    assertNoUser("/conversations/multiline.txt", 2, 3)
+    assertNoUser("/conversations/multiline.txt", 2, 4)
+    assertNoUser("/conversations/multiline.txt", 2, 5)
+    assertUser("/conversations/multiline.txt", 3, 0, "UserD")
+    assertUser("/conversations/multiline.txt", 4, 0, "UserE")
+  }
+
+  it should "correctly parse multiline conversation body" in {
+    assertBody("/conversations/multiline.txt", 0, 0, "Message 1")
+    assertBody("/conversations/multiline.txt", 1, 0, "Message 2")
+    assertBody("/conversations/multiline.txt", 2, 0, "Message 3")
+    assertBody("/conversations/multiline.txt", 2, 1, "Message 4")
+    assertBody("/conversations/multiline.txt", 2, 2, "Message 5")
+    assertBody("/conversations/multiline.txt", 2, 3, "Message 6")
+    assertBody("/conversations/multiline.txt", 2, 4, "Message 7")
+    assertBody("/conversations/multiline.txt", 2, 5, "Message 8")
+    assertBody("/conversations/multiline.txt", 3, 0, "Message 9")
+    assertBody("/conversations/multiline.txt", 4, 0, "Message 10")
+  }
+
+  /* Utility test functions */
+
+  private def assertDate(fileName: String, messageIndex: Int, lineIndex: Int, expectedDate: Date) = {
+    val line = getLine(fileName, messageIndex, lineIndex)
     line.date.get should be(expectedDate)
   }
 
-  private def assertNoLineUser(fileName: String, messageIndex: Int, lineIndex: Int) = {
-    val line = getMessageLine(fileName, messageIndex, lineIndex)
-    line.containsUser should be(false)
-    line.user should be(None)
+  private def assertNoDate(fileName: String, messageIndex: Int, lineIndex: Int, expectedDate: Date) = {
+    val line = getLine(fileName, messageIndex, lineIndex)
+    line.date should be(None)
   }
 
-  private def assertLineUser(fileName: String, messageIndex: Int, lineIndex: Int, expectedUser: String) = {
-    val line = getMessageLine(fileName, messageIndex, lineIndex)
+  private def assertUser(fileName: String, messageIndex: Int, lineIndex: Int, expectedUser: String) = {
+    val line = getLine(fileName, messageIndex, lineIndex)
+    line.user.isDefined should be(true)
     line.user.get should be(expectedUser)
   }
 
-  private def assertLineBody(fileName: String, messageIndex: Int, lineIndex: Int, expectedBody: String) = {
-    val line = getMessageLine(fileName, messageIndex, lineIndex)
+  private def assertNoUser(fileName: String, messageIndex: Int, lineIndex: Int) = {
+    val line = getLine(fileName, messageIndex, lineIndex)
+    line.user should be(None)
+  }
+
+  private def assertBody(fileName: String, messageIndex: Int, lineIndex: Int, expectedBody: String) = {
+    val line = getLine(fileName, messageIndex, lineIndex)
+    line.body.isDefined should be(true)
     line.body.get should be(expectedBody)
+  }
+
+  private def assertNoBody(fileName: String, messageIndex: Int, lineIndex: Int, expectedBody: String) = {
+    val line = getLine(fileName, messageIndex, lineIndex)
+    line.body should be(None)
   }
 
   private def assertMessageCount(fileName: String, expectedMessages: Int) = {
     val file = getResourceFile(fileName)
     val conversation = parser.parse(file)
-    conversation.messages.size should be(expectedMessages)
+    val actualMessages = conversation.messages.size
+    actualMessages should be(expectedMessages)
   }
 
-  private def getMessageLine(fileName: String, messageIndex: Int, lineIndex: Int) = {
+  private def getLine(fileName: String, messageIndex: Int, lineIndex: Int) = {
     val message = getMessage(fileName, messageIndex)
-    message.lines(lineIndex)
+    message.linesPrintable(lineIndex)
   }
 
   private def getMessage(fileName: String, messageIndex: Int) = {
