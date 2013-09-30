@@ -3,8 +3,8 @@ import org.junit.runner.RunWith
 import org.scalatest._
 import org.scalatest.junit.JUnitRunner
 
-/** Test how well the [[Line]] determines if it should be printed
-  * or not.
+/** Test how well the [[com.seaniscool.whatsapp2pdf.parser.Line]] determines if
+  * it should be printed or not.
   *
   * Note: vCards aren't omitted as media on Android
   */
@@ -256,15 +256,15 @@ class TestLinePrinting extends FlatSpec with Matchers {
     assertPrintable(attachmentAndroid("gif"))
   }
 
-  def assertPrintable(text: String) {
+  private def assertPrintable(text: String) {
     assertPrintable(text, true)
   }
 
-  def assertNotPrintable(text: String) {
+  private def assertNotPrintable(text: String) {
     assertPrintable(text, false)
   }
 
-  def assertPrintable(text: String, expected: Boolean) {
+  private def assertPrintable(text: String, expected: Boolean) {
     new Line(text, 1).isPrintable should be(expected)
   }
 
