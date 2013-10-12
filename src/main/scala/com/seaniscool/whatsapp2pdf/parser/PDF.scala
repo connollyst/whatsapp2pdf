@@ -34,10 +34,12 @@ class PDF(document: Document, imagesDirectory: File) {
 
   def addMessage(document: Document, message: Message) {
     newParagraph()
+//    margin-top: 3,2 cm  ;  margin-bottom:  2,3 cm  ;  margin-left-right: 3 cm
+    paragraph.setSpacingBefore(3.2f)
+    paragraph.setSpacingAfter(2.3f)
     addUser(paragraph, message)
-    addTime(paragraph, message)
-    add(paragraph, ":")
     addBody(paragraph, message)
+    addTime(paragraph, message)
   }
 
 
@@ -45,12 +47,12 @@ class PDF(document: Document, imagesDirectory: File) {
     val user = message.user
     val style = userStyle(user)
     if (!user.isEmpty) {
-      add(paragraph, user + " ", style)
+      add(paragraph, user + ": ", style)
     }
   }
 
   private def addTime(paragraph: Paragraph, message: Message) {
-    add(paragraph, PDFStyles.TIME.format(message.date))
+    add(paragraph, PDFStyles.TIME.format(message.date), PDFStyles.FONT_TIME)
   }
 
   private def addBody(paragraph: Paragraph, message: Message) {
@@ -63,7 +65,7 @@ class PDF(document: Document, imagesDirectory: File) {
   }
 
   private def add(paragraph: Paragraph, text: String) {
-    add(paragraph, text, PDFStyles.FONT)
+    add(paragraph, text, PDFStyles.FONT_MAIN)
   }
 
   private def add(paragraph: Paragraph, text: String, font: Font) {
@@ -117,7 +119,7 @@ class PDF(document: Document, imagesDirectory: File) {
     val users = colorMap.size
     val colorIndex = (users + 1) % PDFStyles.COLORS.size
     val color = PDFStyles.COLORS(colorIndex)
-    val font = new Font(PDFStyles.FONT)
+    val font = new Font(PDFStyles.FONT_MAIN)
     font.setColor(Color.decode(color))
     Log.debug("Created user style for " + user + ": " + color)
     font
