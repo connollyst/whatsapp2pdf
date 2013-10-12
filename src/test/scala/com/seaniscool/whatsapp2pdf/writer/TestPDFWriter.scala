@@ -1,4 +1,4 @@
-package com.seaniscool.whatsapp2pdf.parser
+package com.seaniscool.whatsapp2pdf.writer
 
 import com.seaniscool.whatsapp2pdf.writer.PDFWriter
 import java.io.File

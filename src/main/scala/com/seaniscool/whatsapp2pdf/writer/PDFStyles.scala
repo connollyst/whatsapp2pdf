@@ -15,10 +15,16 @@ object PDFStyles {
   val PAGE_SIZE = PageSize.A5
   val DATE = new SimpleDateFormat("dd/ww/yyyy")
   val TIME = new SimpleDateFormat(" (kk:mm)")
-  val MARGIN_TOP = cmToPoints(1.8)
-  val MARGIN_BOTTOM = inToPoints(1)
-  val MARGIN_LEFT = cmToPoints(3)
-  val MARGIN_RIGHT = cmToPoints(3)
+
+  // Margins
+  val MARGIN_PAGE_TOP = cmToPoints(2.5)
+  val MARGIN_PAGE_BOTTOM = inToPoints(1)
+  val MARGIN_PAGE_LEFT = cmToPoints(3)
+  val MARGIN_PAGE_RIGHT = cmToPoints(3)
+  val MARGIN_DATE_TOP = cmToPoints(0.7)
+  val MARGIN_DATE_BOTTOM = cmToPoints(0.5)
+  val MARGIN_MESSAGE_TOP = cmToPoints(0.25)
+  val MARGIN_MESSAGE_BOTTOM = cmToPoints(0.25)
 
   def inToPoints(inches: Double): Float = {
     val points = inches * 72

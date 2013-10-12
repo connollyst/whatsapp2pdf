@@ -1,3 +1,5 @@
+package com.seaniscool.whatsapp2pdf.parser
+
 import com.seaniscool.whatsapp2pdf.parser.Line
 import org.junit.runner.RunWith
 import org.scalatest._

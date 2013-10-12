@@ -1,3 +1,5 @@
+package com.seaniscool.whatsapp2pdf.parser
+
 import com.seaniscool.whatsapp2pdf.parser.WhatsAppParser
 import java.io.File
 import java.util.{GregorianCalendar, Date}

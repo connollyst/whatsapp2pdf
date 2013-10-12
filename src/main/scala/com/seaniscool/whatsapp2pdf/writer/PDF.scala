@@ -36,8 +36,8 @@ class PDF(document: Document, imagesDirectory: File) {
   def addDate(document: Document, date: Date) {
     newParagraph()
     paragraph.setAlignment(Element.ALIGN_CENTER)
-    paragraph.setSpacingBefore(PDFStyles.cmToPoints(0.2))
-    paragraph.setSpacingAfter(PDFStyles.cmToPoints(0.5))
+    paragraph.setSpacingBefore(PDFStyles.MARGIN_DATE_TOP)
+    paragraph.setSpacingAfter(PDFStyles.MARGIN_DATE_BOTTOM)
     add(paragraph, PDFStyles.DATE.format(date), PDFStyles.FONT_DATE)
   }
 
@@ -48,8 +48,8 @@ class PDF(document: Document, imagesDirectory: File) {
     */
   def addMessage(document: Document, message: Message) {
     newParagraph()
-    paragraph.setSpacingBefore(3.2f)
-    paragraph.setSpacingAfter(2.3f)
+    paragraph.setSpacingBefore(PDFStyles.MARGIN_MESSAGE_TOP)
+    paragraph.setSpacingAfter(PDFStyles.MARGIN_MESSAGE_BOTTOM)
     addUser(paragraph, message)
     addBody(paragraph, message)
     addTime(paragraph, message)

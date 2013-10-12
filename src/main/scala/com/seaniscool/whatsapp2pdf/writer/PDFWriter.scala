@@ -55,8 +55,8 @@ class PDFWriter(outputDirectory: File) {
 
   def createDocument(title: String, file: File): Document = {
     val document = new Document(PDFStyles.PAGE_SIZE,
-      PDFStyles.MARGIN_LEFT, PDFStyles.MARGIN_RIGHT,
-      PDFStyles.MARGIN_TOP, PDFStyles.MARGIN_BOTTOM)
+      PDFStyles.MARGIN_PAGE_LEFT, PDFStyles.MARGIN_PAGE_RIGHT,
+      PDFStyles.MARGIN_PAGE_TOP, PDFStyles.MARGIN_PAGE_BOTTOM)
     val writer = PdfWriter.getInstance(document, new FileOutputStream(file))
     writer.setPageEvent(new PDFHeader(title))
     writer.setPageEvent(new PDFBackground())
