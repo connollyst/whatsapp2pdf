@@ -1,15 +1,14 @@
 import com.seaniscool.whatsapp2pdf.parser.WhatsAppParser
 import java.io.File
-import java.util.{GregorianCalendar, Calendar, Date}
+import java.util.{GregorianCalendar, Date}
 import org.junit.runner.RunWith
 import org.scalatest.junit.JUnitRunner
 import org.scalatest.{Matchers, FlatSpec}
 
-/**
- *
- *
- * @author Sean Connolly
- */
+/** Test cases for [[com.seaniscool.whatsapp2pdf.parser.Line]] parsing.
+  *
+  * @author Sean Connolly
+  */
 @RunWith(classOf[JUnitRunner])
 class TestLineParsing extends FlatSpec with Matchers {
 

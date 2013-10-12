@@ -46,8 +46,8 @@ class PDFWriter(outputDirectory: File) {
   }
 
   def createDocument(file: File): Document = {
-    val document = new Document(PageSize.A5,
-      PDFWriter.MARGIN, PDFWriter.MARGIN, PDFWriter.MARGIN, PDFWriter.MARGIN)
+    val document = new Document(PDFStyles.PAGE_SIZE,
+      PDFStyles.MARGIN, PDFStyles.MARGIN, PDFStyles.MARGIN, PDFStyles.MARGIN)
     val writer = PdfWriter.getInstance(document, new FileOutputStream(file))
     writer.setStrictImageSequence(true)
     document
@@ -94,52 +94,5 @@ class PDFWriter(outputDirectory: File) {
     lastDay != nextDay && lastYear != nextYear
   }
 
-
-}
-
-object PDFWriter {
-
-  val DATE = new SimpleDateFormat("dd/ww/yy")
-  val TIME = new SimpleDateFormat("kk'h'mm")
-  val MARGIN = margin(1)
-
-  private def margin(inches: Int): Int = {
-    // val inches = cm / 2.54
-    val points = inches * 72
-    points.toInt
-  }
-
-  // TODO this font is shite
-  //  private val FONT_FILE = "OriginalGaramond.ttf"
-  //  private val FONT_NAME = "OriginalGaramond"
-  //  private val FONT_RESOURCE = getClass.getClassLoader.getResource(FONT_FILE)
-  //  Log.debug("Registering custom font: " + FONT_RESOURCE)
-  //  FontFactory.register(FONT_RESOURCE.getFile, FONT_NAME)
-  //  private val FONT = FontFactory.getFont(FONT_NAME)
-  //  FONT.setSize(6)
-  val FONT = new Font(Font.HELVETICA)
-  val COLORS = List(
-    "#FF0000",
-    "#00C000",
-    "#0000FF",
-    "#CC0000",
-    "#FF6600",
-    "#FF0033",
-    "#CC0099",
-    "#99CC00",
-    "#9900CC",
-    "#9900FF",
-    "#993300",
-    "#990033",
-    "#660033",
-    "#333366",
-    "#330000",
-    "#000033",
-    "#000000",
-    "#3366FF",
-    "#66FF00",
-    "#663366",
-    "#66CC99"
-  )
 
 }

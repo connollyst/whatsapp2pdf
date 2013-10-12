@@ -29,7 +29,7 @@ class PDF(document: Document, imagesDirectory: File) {
   def addDate(document: Document, date: Date) {
     newParagraph()
     paragraph.setAlignment(Element.ALIGN_CENTER)
-    add(paragraph, PDFWriter.DATE.format(date))
+    add(paragraph, PDFStyles.DATE.format(date))
   }
 
   def addMessage(document: Document, message: Message) {
@@ -50,7 +50,7 @@ class PDF(document: Document, imagesDirectory: File) {
   }
 
   private def addTime(paragraph: Paragraph, message: Message) {
-    add(paragraph, PDFWriter.TIME.format(message.date))
+    add(paragraph, PDFStyles.TIME.format(message.date))
   }
 
   private def addBody(paragraph: Paragraph, message: Message) {
@@ -63,7 +63,7 @@ class PDF(document: Document, imagesDirectory: File) {
   }
 
   private def add(paragraph: Paragraph, text: String) {
-    add(paragraph, text, PDFWriter.FONT)
+    add(paragraph, text, PDFStyles.FONT)
   }
 
   private def add(paragraph: Paragraph, text: String, font: Font) {
@@ -115,9 +115,9 @@ class PDF(document: Document, imagesDirectory: File) {
 
   private def createUserStyle(user: String): Font = {
     val users = colorMap.size
-    val colorIndex = (users + 1) % PDFWriter.COLORS.size
-    val color = PDFWriter.COLORS(colorIndex)
-    val font = new Font(PDFWriter.FONT)
+    val colorIndex = (users + 1) % PDFStyles.COLORS.size
+    val color = PDFStyles.COLORS(colorIndex)
+    val font = new Font(PDFStyles.FONT)
     font.setColor(Color.decode(color))
     Log.debug("Created user style for " + user + ": " + color)
     font
