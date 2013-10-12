@@ -18,7 +18,7 @@ class Line(text: String, val number: Int) {
   private var _user: Option[String] = None
   private var _body: Option[String] = None
 
-  val matcher = Line.REGEX_IOS.matcher(text)
+  val matcher = Line.REGEX_IOS.matcher(clean)
   if (matcher.find) {
     val dateMatch = matcher.group(2)
     val userMatch = matcher.group(4)
@@ -57,7 +57,19 @@ class Line(text: String, val number: Int) {
     * @return true if the line is blank
     */
   def isBlank: Boolean = {
-    text.trim.isEmpty
+    clean.isEmpty
+  }
+
+  /** Return a clean version of the text.
+    *
+    * @return
+    */
+  def clean: String = {
+    if (text.startsWith("\uFEFF")) {
+      text.substring(1).trim
+    } else {
+      text.trim
+    }
   }
 
   /** Is this line to be excluded from printing?

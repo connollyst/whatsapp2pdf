@@ -57,8 +57,8 @@ class PDF(document: Document, imagesDirectory: File) {
 
   private def addUser(paragraph: Paragraph, message: Message) {
     val user = message.user
-    val style = userStyle(user)
     if (!user.isEmpty) {
+      val style = userStyle(user)
       add(paragraph, user + ": ", style)
     }
   }
