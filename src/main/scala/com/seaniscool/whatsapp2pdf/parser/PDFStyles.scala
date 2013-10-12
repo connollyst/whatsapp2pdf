@@ -1,22 +1,24 @@
 package com.seaniscool.whatsapp2pdf.parser
 
-import java.text.SimpleDateFormat
-import com.lowagie.text.{FontFactory, PageSize, Font}
-import com.seaniscool.whatsapp2pdf.Log
 import com.lowagie.text.pdf.BaseFont
+import com.lowagie.text.{PageSize, Font}
+import com.seaniscool.whatsapp2pdf.Log
 import java.awt.Color
+import java.text.SimpleDateFormat
 
-/**
- *
- *
- * @author Sean Connolly
- */
+/** Fonts, colors, images, and the like used to style the PDF.
+  *
+  * @author Sean Connolly
+  */
 object PDFStyles {
 
   val PAGE_SIZE = PageSize.A5
-  val DATE = new SimpleDateFormat("dd/ww/yy")
+  val DATE = new SimpleDateFormat("dd/ww/yyyy")
   val TIME = new SimpleDateFormat(" (kk:mm)")
-  val MARGIN = inToPoints(1)
+  val MARGIN_TOP = cmToPoints(1.8)
+  val MARGIN_BOTTOM = inToPoints(1)
+  val MARGIN_LEFT = cmToPoints(3)
+  val MARGIN_RIGHT = cmToPoints(3)
 
   def inToPoints(inches: Double): Float = {
     val points = inches * 72
@@ -35,7 +37,7 @@ object PDFStyles {
   val BACKGROUND_IMAGE = BACKGROUND_RESOURCE.getFile
 
   // Font
-  private val FONT_FILE = "font/AppleGaramond.ttf"
+  private val FONT_FILE = "font/GaramondPremrPro.otf"
   private val FONT_RESOURCE = getClass.getClassLoader.getResource(FONT_FILE)
   Log.debug("Custom font: " + FONT_RESOURCE)
   private val FONT_BASE = BaseFont.createFont(FONT_RESOURCE.getFile,

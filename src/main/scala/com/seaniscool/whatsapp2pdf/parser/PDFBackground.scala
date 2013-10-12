@@ -9,8 +9,9 @@ import com.lowagie.text.{Image, Document}
   */
 class PDFBackground extends PdfPageEventHelper {
 
+  private val background = Image.getInstance(PDFStyles.BACKGROUND_IMAGE)
+
   override def onEndPage(writer: PdfWriter, document: Document) = {
-    val background = Image.getInstance(PDFStyles.BACKGROUND_IMAGE)
     val width = document.getPageSize.getWidth
     val height = document.getPageSize.getHeight
     writer.getDirectContentUnder.addImage(background, width, 0, 0, height, 0, 0)

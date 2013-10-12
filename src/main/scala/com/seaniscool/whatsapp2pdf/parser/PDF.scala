@@ -26,22 +26,40 @@ class PDF(document: Document, imagesDirectory: File) {
     paragraph = new Paragraph()
   }
 
+  /**
+   * Add a title to the PDF.
+   * @param document the document to add the title to
+   * @param title asd
+   */
+  def addTitle(document: Document, title: String) {
+
+  }
+
+  /**
+   * Add a date to the PDF.
+   *
+   * @param document the document to add the message to
+   * @param date the message to add to the document
+   */
   def addDate(document: Document, date: Date) {
     newParagraph()
     paragraph.setAlignment(Element.ALIGN_CENTER)
     add(paragraph, PDFStyles.DATE.format(date))
   }
 
+  /** Add a message to the PDF.
+    *
+    * @param document the document to add the message to
+    * @param message the message to add to the document
+    */
   def addMessage(document: Document, message: Message) {
     newParagraph()
-//    margin-top: 3,2 cm  ;  margin-bottom:  2,3 cm  ;  margin-left-right: 3 cm
     paragraph.setSpacingBefore(3.2f)
     paragraph.setSpacingAfter(2.3f)
     addUser(paragraph, message)
     addBody(paragraph, message)
     addTime(paragraph, message)
   }
-
 
   private def addUser(paragraph: Paragraph, message: Message) {
     val user = message.user
