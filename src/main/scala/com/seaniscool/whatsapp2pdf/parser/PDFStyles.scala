@@ -14,7 +14,7 @@ object PDFStyles {
 
   val PAGE_SIZE = PageSize.A5
   val DATE = new SimpleDateFormat("dd/ww/yy")
-  val TIME = new SimpleDateFormat("kk'h'mm")
+  val TIME = new SimpleDateFormat("(kk:mm)")
   val MARGIN = margin(1)
 
   private def margin(inches: Int): Int = {
