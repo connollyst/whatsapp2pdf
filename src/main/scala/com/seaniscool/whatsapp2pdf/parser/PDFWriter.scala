@@ -46,10 +46,12 @@ class PDFWriter(outputDirectory: File) {
   }
 
   def createDocument(file: File): Document = {
+    val name = Files.getNameWithoutExtension(file.getName)
     val document = new Document(PDFStyles.PAGE_SIZE,
       PDFStyles.MARGIN_LEFT, PDFStyles.MARGIN_RIGHT,
       PDFStyles.MARGIN_TOP, PDFStyles.MARGIN_BOTTOM)
     val writer = PdfWriter.getInstance(document, new FileOutputStream(file))
+    writer.setPageEvent(new PDFHeader(name))
     writer.setPageEvent(new PDFBackground())
     writer.setStrictImageSequence(true)
     document

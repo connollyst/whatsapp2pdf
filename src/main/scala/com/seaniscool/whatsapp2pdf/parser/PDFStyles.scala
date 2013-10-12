@@ -43,7 +43,9 @@ object PDFStyles {
   private val FONT_BASE = BaseFont.createFont(FONT_RESOURCE.getFile,
     BaseFont.CP1252, BaseFont.EMBEDDED)
 
+  val FONT_HEAD = new Font(FONT_BASE, 10)
   val FONT_MAIN = new Font(FONT_BASE, 14)
+  val FONT_DATE = new Font(FONT_BASE, 11)
   val FONT_TIME = new Font(FONT_BASE, 11, Font.NORMAL, Color.decode("#c7c7c7"))
 
   val COLORS = List(

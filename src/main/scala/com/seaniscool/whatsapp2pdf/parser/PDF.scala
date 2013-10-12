@@ -27,15 +27,6 @@ class PDF(document: Document, imagesDirectory: File) {
   }
 
   /**
-   * Add a title to the PDF.
-   * @param document the document to add the title to
-   * @param title asd
-   */
-  def addTitle(document: Document, title: String) {
-
-  }
-
-  /**
    * Add a date to the PDF.
    *
    * @param document the document to add the message to
@@ -44,7 +35,9 @@ class PDF(document: Document, imagesDirectory: File) {
   def addDate(document: Document, date: Date) {
     newParagraph()
     paragraph.setAlignment(Element.ALIGN_CENTER)
-    add(paragraph, PDFStyles.DATE.format(date))
+    paragraph.setSpacingBefore(PDFStyles.cmToPoints(0.2))
+    paragraph.setSpacingAfter(PDFStyles.cmToPoints(0.5))
+    add(paragraph, PDFStyles.DATE.format(date), PDFStyles.FONT_DATE)
   }
 
   /** Add a message to the PDF.
