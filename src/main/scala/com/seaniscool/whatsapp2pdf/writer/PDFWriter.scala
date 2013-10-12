@@ -10,6 +10,7 @@ import java.util.{Calendar, Date}
 import scala.List
 import scala.Some
 import scala.Some
+import com.seaniscool.whatsapp2pdf.Log
 
 
 /** Writes a [[com.seaniscool.whatsapp2pdf.parser.Conversation]] to PDF.
@@ -97,7 +98,7 @@ class PDFWriter(outputDirectory: File) {
     val nextDay = nextCalendar.get(Calendar.DAY_OF_YEAR)
     val lastYear = lastCalendar.get(Calendar.YEAR)
     val nextYear = nextCalendar.get(Calendar.YEAR)
-    lastDay != nextDay && lastYear != nextYear
+    lastDay != nextDay || lastYear != nextYear
   }
 
 
