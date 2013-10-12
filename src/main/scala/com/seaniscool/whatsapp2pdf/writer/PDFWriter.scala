@@ -19,6 +19,10 @@ import com.seaniscool.whatsapp2pdf.Log
   */
 class PDFWriter(outputDirectory: File) {
 
+  // Calendars used to compare two dates
+  private val calendarA = Calendar.getInstance()
+  private val calendarB = Calendar.getInstance()
+
   /** Write the [[com.seaniscool.whatsapp2pdf.parser.Conversation]] to a PDF file with the suggested
     * file name in the directory specified for this writer.
     *
@@ -89,15 +93,12 @@ class PDFWriter(outputDirectory: File) {
     * @param nextDate the next date
     */
   private def isNewDay(lastDate: Date, nextDate: Date): Boolean = {
-    // TODO can we recycle calendars?
-    val lastCalendar = Calendar.getInstance()
-    val nextCalendar = Calendar.getInstance()
-    lastCalendar.setTime(lastDate)
-    nextCalendar.setTime(nextDate)
-    val lastDay = lastCalendar.get(Calendar.DAY_OF_YEAR)
-    val nextDay = nextCalendar.get(Calendar.DAY_OF_YEAR)
-    val lastYear = lastCalendar.get(Calendar.YEAR)
-    val nextYear = nextCalendar.get(Calendar.YEAR)
+    calendarA.setTime(lastDate)
+    calendarB.setTime(nextDate)
+    val lastDay = calendarA.get(Calendar.DAY_OF_YEAR)
+    val nextDay = calendarB.get(Calendar.DAY_OF_YEAR)
+    val lastYear = calendarA.get(Calendar.YEAR)
+    val nextYear = calendarB.get(Calendar.YEAR)
     lastDay != nextDay || lastYear != nextYear
   }
 
