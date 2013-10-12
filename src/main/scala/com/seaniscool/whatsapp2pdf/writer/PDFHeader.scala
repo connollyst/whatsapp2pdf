@@ -1,4 +1,4 @@
-package com.seaniscool.whatsapp2pdf.parser
+package com.seaniscool.whatsapp2pdf.writer
 
 import com.lowagie.text.pdf.{ColumnText, PdfWriter, PdfPageEventHelper}
 import com.lowagie.text.{Element, Phrase, Image, Document}

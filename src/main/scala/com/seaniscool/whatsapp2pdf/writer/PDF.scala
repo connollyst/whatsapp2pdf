@@ -1,11 +1,12 @@
-package com.seaniscool.whatsapp2pdf.parser
+package com.seaniscool.whatsapp2pdf.writer
 
 import com.lowagie.text._
+import com.seaniscool.whatsapp2pdf.Log
+import com.seaniscool.whatsapp2pdf.parser.{Line, Message}
 import java.awt.Color
 import java.io.File
 import java.util.Date
 import scala.collection.mutable
-import com.seaniscool.whatsapp2pdf.Log
 
 /** A PDF of the WhatsApp
   *

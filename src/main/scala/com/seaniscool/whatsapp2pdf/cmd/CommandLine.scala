@@ -1,7 +1,9 @@
-package com.seaniscool.whatsapp2pdf
+package com.seaniscool.whatsapp2pdf.cmd
 
 import com.beust.jcommander.JCommander
-import com.seaniscool.whatsapp2pdf.parser.{WhatsAppParser, PDFWriter}
+import com.seaniscool.whatsapp2pdf.Log
+import com.seaniscool.whatsapp2pdf.parser.WhatsAppParser
+import com.seaniscool.whatsapp2pdf.writer.PDFWriter
 
 /** The main entry point to the application.
   * Interprets the command line arguments and kicks off the parser.

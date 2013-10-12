@@ -1,12 +1,14 @@
-package com.seaniscool.whatsapp2pdf.parser
+package com.seaniscool.whatsapp2pdf.writer
 
 import com.google.common.io.Files
 import com.lowagie.text._
 import com.lowagie.text.pdf.PdfWriter
+import com.seaniscool.whatsapp2pdf.parser._
 import java.io.{File, FileOutputStream}
 import java.text.SimpleDateFormat
 import java.util.{Calendar, Date}
 import scala.List
+import scala.Some
 import scala.Some
 
 
@@ -29,8 +31,9 @@ class PDFWriter(outputDirectory: File) {
   def write(sourceFile: File, conversation: Conversation): File = {
     val sourceDirectory = sourceFile.getParentFile
     val name = sourceFile.getName
+    val title = Files.getNameWithoutExtension(name)
     val targetFile = getFile(name)
-    val document = createDocument(targetFile)
+    val document = createDocument(title, targetFile)
     val pdf = new PDF(document, sourceDirectory)
     var lastDate: Option[Date] = None
     for (message <- conversation.clean.messages) {
@@ -45,13 +48,12 @@ class PDFWriter(outputDirectory: File) {
     targetFile
   }
 
-  def createDocument(file: File): Document = {
-    val name = Files.getNameWithoutExtension(file.getName)
+  def createDocument(title: String, file: File): Document = {
     val document = new Document(PDFStyles.PAGE_SIZE,
       PDFStyles.MARGIN_LEFT, PDFStyles.MARGIN_RIGHT,
       PDFStyles.MARGIN_TOP, PDFStyles.MARGIN_BOTTOM)
     val writer = PdfWriter.getInstance(document, new FileOutputStream(file))
-    writer.setPageEvent(new PDFHeader(name))
+    writer.setPageEvent(new PDFHeader(title))
     writer.setPageEvent(new PDFBackground())
     writer.setStrictImageSequence(true)
     document

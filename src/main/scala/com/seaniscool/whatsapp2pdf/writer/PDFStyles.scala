@@ -1,4 +1,4 @@
-package com.seaniscool.whatsapp2pdf.parser
+package com.seaniscool.whatsapp2pdf.writer
 
 import com.lowagie.text.pdf.BaseFont
 import com.lowagie.text.{PageSize, Font}

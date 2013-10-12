@@ -1,7 +1,7 @@
 package com.seaniscool.whatsapp2pdf.ui
 
 import collection.JavaConversions._
-import com.seaniscool.whatsapp2pdf.parser.{PDFWriter, WhatsAppParser}
+import com.seaniscool.whatsapp2pdf.parser.{WhatsAppParser}
 import java.io.{IOException, File}
 import javafx.fxml.{FXML, FXMLLoader}
 import javafx.scene.Group
@@ -13,6 +13,7 @@ import javafx.scene.input.{TransferMode, MouseDragEvent, MouseEvent, DragEvent}
 import javafx.scene.paint.Color
 import com.google.common.io.Files
 import com.seaniscool.whatsapp2pdf.Directory
+import com.seaniscool.whatsapp2pdf.writer.PDFWriter
 
 /** The controller for the WhatsApp2PDF JavaFX UI.
   *

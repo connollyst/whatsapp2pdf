@@ -53,7 +53,9 @@ class Message(val lines: ListBuffer[Line]) {
     * @return the date
     */
   def date: Date = {
-    // TODO handle exceptions
+    if (!firstLine.date.isDefined) {
+      throw new NoSuchElementException("No date on line: " + firstLine)
+    }
     firstLine.date.get
   }
 
@@ -65,6 +67,10 @@ class Message(val lines: ListBuffer[Line]) {
     firstLine.user.getOrElse("")
   }
 
+  /** Get a clean copy of the message; unprintable lines are excluded.
+    *
+    * @return the clean message
+    */
   def clean(): Message = {
     val cleaned = new Message(lines)
     val linesToExclude = new ListBuffer[Line]

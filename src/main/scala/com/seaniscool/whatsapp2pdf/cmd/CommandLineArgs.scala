@@ -1,7 +1,8 @@
-package com.seaniscool.whatsapp2pdf
+package com.seaniscool.whatsapp2pdf.cmd
 
 import com.beust.jcommander.converters.FileConverter
 import com.beust.jcommander.{IStringConverter, Parameter}
+import com.seaniscool.whatsapp2pdf.{Log, Directory}
 import java.io.File
 import scala.collection.JavaConversions._
 

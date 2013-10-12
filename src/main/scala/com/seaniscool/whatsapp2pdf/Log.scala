@@ -1,5 +1,7 @@
 package com.seaniscool.whatsapp2pdf
 
+import com.seaniscool.whatsapp2pdf.cmd.CommandLineArgs
+
 /** We don't do any real logging in this application.
   * This logger lets us print debug statements to standard out if debugging is
   * enabled in the command line arguments.
