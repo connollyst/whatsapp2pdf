@@ -98,7 +98,10 @@ class Controller(primaryStage: Stage) extends Group {
         convertFile(sourceFile, parser, writer)
         sourceFiles.remove()
       } catch {
-        case t: Throwable => Log.error("Failed to convert file!", t)
+        case t: Throwable => {
+          Log.error("Failed to convert file!", t)
+          // TODO display an error dialog
+        }
       }
     }
   }
