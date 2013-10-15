@@ -1,6 +1,5 @@
 package com.seaniscool.whatsapp2pdf.writer
 
-import com.seaniscool.whatsapp2pdf.writer.PDFWriter
 import java.io.File
 import java.text.SimpleDateFormat
 import java.util.Date
