@@ -65,6 +65,8 @@ class Controller(primaryStage: Stage) extends Group {
         event.acceptTransferModes(TransferMode.COPY)
       }
     })
+    val logFile = new File(Directory.temp(), "whatsapp2pdf.log")
+    Log.register(new FileOutputStream(logFile))
   }
 
   @FXML
