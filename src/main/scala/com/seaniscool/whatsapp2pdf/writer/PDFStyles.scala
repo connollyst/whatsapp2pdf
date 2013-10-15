@@ -2,9 +2,11 @@ package com.seaniscool.whatsapp2pdf.writer
 
 import com.lowagie.text.pdf.BaseFont
 import com.lowagie.text.{PageSize, Font}
-import com.seaniscool.whatsapp2pdf.Log
+import com.seaniscool.whatsapp2pdf.{Directory, Log}
 import java.awt.Color
 import java.text.SimpleDateFormat
+import java.io.{FileOutputStream, IOException, FileNotFoundException, File}
+import com.google.common.io.{ByteStreams, Files}
 
 /** Fonts, colors, images, and the like used to style the PDF.
   *
@@ -37,22 +39,17 @@ object PDFStyles {
   }
 
   // Background
-  private val BACKGROUND_FILE = "background.jpg"
-  private val BACKGROUND_RESOURCE = getClass.getClassLoader.getResource(BACKGROUND_FILE)
-  Log.debug("Custom background: " + BACKGROUND_RESOURCE)
-  val BACKGROUND_IMAGE = BACKGROUND_RESOURCE.getFile
+  private val BACKGROUND_RESOURCE = "background.jpg"
+  val BACKGROUND_IMAGE = writeResourceToTempFile(BACKGROUND_RESOURCE)
 
   // Font
-  private val FONT_FILE = "font/GaramondPremrPro.otf"
-  private val FONT_RESOURCE = getClass.getClassLoader.getResource(FONT_FILE)
-  Log.debug("Custom font: " + FONT_RESOURCE)
-  private val FONT_BASE = BaseFont.createFont(FONT_RESOURCE.getFile,
-    BaseFont.CP1252, BaseFont.EMBEDDED)
-
-  val FONT_HEAD = new Font(FONT_BASE, 10)
-  val FONT_MAIN = new Font(FONT_BASE, 14)
-  val FONT_DATE = new Font(FONT_BASE, 11)
-  val FONT_TIME = new Font(FONT_BASE, 11, Font.NORMAL, Color.decode("#c7c7c7"))
+  private val FONT_RESOURCE = "font/GaramondPremrPro.otf"
+  private val FONT_FILE = writeResourceToTempFile(FONT_RESOURCE)
+  private val FONT = BaseFont.createFont(FONT_FILE, BaseFont.CP1252, BaseFont.EMBEDDED)
+  val FONT_HEAD = new Font(FONT, 10)
+  val FONT_MAIN = new Font(FONT, 14)
+  val FONT_DATE = new Font(FONT, 11)
+  val FONT_TIME = new Font(FONT, 11, Font.NORMAL, Color.decode("#c7c7c7"))
 
   val COLORS = List(
     "#ba7f22",
@@ -66,5 +63,30 @@ object PDFStyles {
     "#45b0ba",
     "#03884e"
   )
+
+  /** Writes a bundled resource to a temporary directory to be
+    *
+    * @param resourcePath the path of the resource relative to the application root
+    * @return the absolute path of the temporary file
+    */
+  private def writeResourceToTempFile(resourcePath: String): String = {
+    val resource = getClass.getClassLoader.getResource(resourcePath)
+    if (resource == null) {
+      throw new IOException("No resource found at " + resourcePath)
+    }
+    val resourceFile = new File(resource.getFile)
+    val fileName = resourceFile.getName
+    val tempDir = Directory.temp()
+    val file = new File(tempDir, fileName)
+    Log.debug("Copying resource: " + resource + " to " + file)
+    if (file.exists()) {
+      throw new IOException("Temporary resource already exists: " + file)
+    }
+    val inputStream = resource.openStream()
+    val outputStream = new FileOutputStream(file)
+    ByteStreams.copy(inputStream, outputStream)
+    file.deleteOnExit()
+    file.getAbsolutePath
+  }
 
 }

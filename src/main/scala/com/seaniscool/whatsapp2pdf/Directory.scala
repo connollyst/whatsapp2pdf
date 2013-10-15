@@ -1,12 +1,27 @@
 package com.seaniscool.whatsapp2pdf
 
 import java.io.File
+import com.google.common.io.Files
 
 /** A utility for resolving user directories.
   *
   * @author Sean Connolly
   */
 object Directory {
+
+  private var TEMP_DIR: Option[File] = None
+
+  /** Get the temporary directory used by the application.
+    *
+    * @return the temporary directory
+    */
+  def temp(): File = {
+    if (!TEMP_DIR.isDefined) {
+      TEMP_DIR = Some(Files.createTempDir())
+      TEMP_DIR.get.deleteOnExit()
+    }
+    TEMP_DIR.get
+  }
 
   /** Get the user's current directory, as defined by the system.
     *

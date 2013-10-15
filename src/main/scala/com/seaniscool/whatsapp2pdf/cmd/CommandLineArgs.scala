@@ -35,7 +35,7 @@ object CommandLineArgs {
     names = Array("-d", "-debug"),
     description = "Debug mode"
   )
-  val debugMode: Boolean = false
+  var debugMode: Boolean = false
 
   def whatsAppFiles: List[File] = _whatsAppFile.toList
 

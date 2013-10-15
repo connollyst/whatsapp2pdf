@@ -53,6 +53,13 @@ class PDFWriter(outputDirectory: File) {
     targetFile
   }
 
+  /** Create the [[com.lowagie.text.Document]] with the given title. The
+    * margins, background image, and page headers are all specified.
+    *
+    * @param title the conversation title
+    * @param file the pdf file
+    * @return the pdf document
+    */
   def createDocument(title: String, file: File): Document = {
     val document = new Document(PDFStyles.PAGE_SIZE,
       PDFStyles.MARGIN_PAGE_LEFT, PDFStyles.MARGIN_PAGE_RIGHT,
@@ -101,6 +108,5 @@ class PDFWriter(outputDirectory: File) {
     val nextYear = calendarB.get(Calendar.YEAR)
     lastDay != nextDay || lastYear != nextYear
   }
-
 
 }
